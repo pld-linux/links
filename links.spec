@@ -7,7 +7,7 @@ Summary(uk):	Текстовий WWW броузер типу Lynx
 Name:		links
 Version:	1.00
 %define	bver	pre12
-Release:	0.%{bver}.1
+Release:	0.%{bver}.2
 Epoch:		2
 License:	GPL v2
 Group:		Applications/Networking
@@ -22,6 +22,7 @@ Patch1:		%{name}-dump_codepage.patch
 Patch2:		%{name}-gzip_fallback.patch
 Patch3:		%{name}-content_encoding.patch
 Patch4:		%{name}-home_etc.patch
+Patch5:		%{name}-typo.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	gpm-devel
@@ -87,6 +88,7 @@ Links - це текстовий WWW броузер, на перший погляд схожий на Lynx, але
 %patch2 -p1
 %patch3 -p1
 #%patch4 -p1
+%patch5 -p1
 
 %build
 %{__aclocal}
