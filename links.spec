@@ -16,7 +16,7 @@ Summary(ru):	Текстовый WWW броузер типа Lynx
 Summary(uk):	Текстовий WWW броузер типу Lynx
 Name:		links
 Version:	2.0pre4
-Release:	2
+Release:	3
 Epoch:		1
 License:	GPL v2
 Group:		Applications/Networking
