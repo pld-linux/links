@@ -2,7 +2,7 @@ Summary:	Lynx-like text WWW browser
 Summary(pl):	Podobna do Lynxa tekstowa przegl±darka WWW
 Name:		links
 Version:	0.95
-Release:	2
+Release:	3
 Epoch:		1
 License:	GPL
 Group:		Applications/Networking
@@ -14,7 +14,7 @@ Patch0:		http://www.misiek.eu.org/ipv6/%{name}-0.92-ipv6-20000921.patch.gz
 URL:		http://artax.karlin.mff.cuni.cz/~mikulas/links/
 BuildRequires:	gpm-devel
 BuildRequires:	ncurses-devel => 5.1
-BuildRequires:	openssl-devel
+BuildRequires:	openssl-devel >= 0.9.6a
 Provides:	webclient
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
