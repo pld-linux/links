@@ -7,7 +7,6 @@ License:	GPL
 Group:		Applications/Networking
 Group(pl):	Aplikacje/Sieciowe
 Source0:	%{name}-%{version}.tar.gz
-Patch0:		links-abort.patch
 URL:		http://artax.karlin.mff.cuni.cz/~mikulas/links/
 BuildRequires:	gpm-devel
 BuildRequires:	ncurses-devel => 5.0
@@ -33,8 +32,8 @@ ale mimo wszystko inn±:
 - mo¿e ¶ci±gaæ pliki w tle
 
 %prep
-%setup  -q
-# %patch0 -p1
+# temporary -n, to work with links-current snapshots
+%setup  -q -n %{name}-current
 
 %build
 LDFLAGS="-s"; export LDFLAGS
