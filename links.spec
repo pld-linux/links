@@ -3,7 +3,7 @@ Summary(pl):	Podobna do Lynxa tekstowa przegl±darka WWW
 Name:		links
 Version:	0.92
 Release:	4
-Serial:		1
+Epoch:		1
 License:	GPL
 Group:		Applications/Networking
 Group(pl):	Aplikacje/Sieciowe
