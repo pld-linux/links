@@ -5,8 +5,8 @@ Summary(pt_BR):	O links И um browser para modo texto, similar ao lynx.
 Summary(ru):	Текстовый WWW броузер типа Lynx
 Summary(uk):	Текстовий WWW броузер типу Lynx
 Name:		links
-Version:	0.97
-Release:	2
+Version:	0.98
+Release:	1
 Epoch:		1
 License:	GPL v2
 Group:		Applications/Networking
@@ -103,7 +103,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS BUGS ChangeLog README SITES TODO
+%doc AUTHORS BUGS ChangeLog NEWS README SITES TODO
 %attr(755,root,root) %{_bindir}/*
 %{_applnkdir}/Network/WWW/*
 %{_mandir}/man*/*
