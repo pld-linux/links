@@ -2,7 +2,7 @@ Summary:	Lynx-like text WWW browser
 Summary(pl):	Podobna do Lynxa tekstowa przegl±darka WWW
 Name:		links
 Version:	0.95
-Release:	4
+Release:	5
 Epoch:		1
 License:	GPL
 Group:		Applications/Networking
@@ -61,5 +61,5 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc *.gz
 %attr(755,root,root) %{_bindir}/*
-%{_applnkdir}/Networking/WWW/*
+%{_applnkdir}/Network/WWW/*
 %{_mandir}/man*/*
