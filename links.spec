@@ -1,4 +1,19 @@
-# I dont know what release it should have
+#
+# Conditional build:
+# _without_javascript - don't use javascript interpreter
+# _without_graphics - don't use graphics
+# _without_svgalib - compile without svgalib graphics driver
+# _without_x - compile without X Window System graphics driver
+# _without_fb - compile without Linux Framebuffer graphics driver
+# _without_pmshell - compile without PMShell graphics driver
+# _without_atheos - compile without Atheos graphics driver
+#
+# TODO:
+#  - s/configure2_13/configure/
+#  - add desktop file for links -g
+
+%define _snap 20020516
+
 Summary:	Lynx-like text WWW browser
 Summary(es):	El links es un browser para modo texto, similar a lynx.
 Summary(pl):	Podobna do Lynksa tekstowa przegl╠darka WWW
@@ -6,12 +21,12 @@ Summary(pt_BR):	O links И um browser para modo texto, similar ao lynx.
 Summary(ru):	Текстовый WWW броузер типа Lynx
 Summary(uk):	Текстовий WWW броузер типу Lynx
 Name:		links
-Version:	0.97
-Release:	1
+Version:	current
+Release:	%{_snap}.1
 Epoch:		1
 License:	GPL v2
 Group:		Applications/Networking
-Source0:	http://atrey.karlin.mff.cuni.cz/%7Eclock/twibright/%{name}/download/%{name}-current.tar.bz2
+Source0:	http://atrey.karlin.mff.cuni.cz/%7Eclock/twibright/%{name}/download/%{name}-%{version}.tar.bz2
 Source1:	%{name}.desktop
 Source2:	%{name}.1.pl
 Source3:	%{name}.png
@@ -22,11 +37,13 @@ BuildRequires:	gpm-devel
 BuildRequires:	ncurses-devel => 5.1
 BuildRequires:	openssl-devel >= 0.9.6a
 BuildRequires:	zlib-devel
-BuildRequires:  libpng-devel
-BuildRequires:  libjpeg-devel
-BuildRequires:  libtiff-devel
-BuildRequires:  svgalib-devel
-BuildRequires:  XFree86-devel
+%if%{!?_without_graphics:1}%{?_without_graphics:0}
+BuildRequires:	libpng-devel
+BuildRequires:	libjpeg-devel
+BuildRequires:	libtiff-devel
+%{!?_without_svgalib:BuildRequires:  svgalib-devel}
+%{!?_without_x:BuildRequires:  XFree86-devel}
+%endif
 Provides:	webclient
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -77,19 +94,24 @@ Links - це текстовий WWW броузер, на перший погляд схожий на Lynx, але
 - може завантажувати файли в фон╕
 
 %prep
-%setup -q -n %{name}-current
+%setup -q
 
 %build
 #rm -f mssing
 #aclocal
-#autoconf
 #automake -a -c -f
+#autoconf
 if [ -f %{_pkgconfigdir}/libpng12.pc ] ; then
     CPPFLAGS="`pkg-config libpng12 --cflags`"; export CPPFLAGS
 fi
 %configure2_13 \
-    --enable-graphics \
-    --enable-javascript
+    %{!?_wihout_graphics:--enable-graphics} \
+    %{!?_without_javascript:--enable-javascript} \
+		%{?_without_svgalib:--without-svgalib} \
+		%{?_without_x:--without-x} \
+		%{?_without_fb:--without-fb} \
+		%{?_without_pmshell:--without-pmshell} \
+		%{?_without_atheos:--without-atheos}
 %{__make}
 
 %install
