@@ -1,7 +1,7 @@
 Summary:	Lynx-like text WWW browser
 Summary(pl):	Podobna do Lynxa tekstowa przegl±darka WWW
 Name:		links
-Version:	02.04.2000
+Version:	23.05.2000
 Release:	1
 License:	GPL
 Group:		Applications/Networking
@@ -17,7 +17,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Links is a text based WWW browser, at first look similiar to Lynx, but
 somehow different:
 
-- renders tables and (soon) frames
+- renders tables and frames
 - displays colors as specified in current HTML page
 - uses drop-down menu (like in Midnight Commander)
 - can download files in background
@@ -26,7 +26,7 @@ somehow different:
 Links jest tekstow± przegl±dark± WWW, na pierwszy rzut oka podobn± do Lynxa,
 ale mimo wszystko inn±:
 
-- renderuje tabelki i (nied³ugo) ramki
+- renderuje tabelki i ramki
 - wy¶wietla kolory zgodnie z definicjami w ogl±danej stronie HTML
 - u¿ywa opuszczanego menu (jak w Midnight Commanderze)
 - mo¿e ¶ci±gaæ pliki w tle
