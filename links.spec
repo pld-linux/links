@@ -26,12 +26,11 @@ Source0:	http://atrey.karlin.mff.cuni.cz/~clock/twibright/%{name}/download/%{nam
 Source1:	%{name}.desktop
 Source2:	%{name}.1.pl
 Source3:	%{name}.png
-%if%{!?_without_graphics:1}%{?_without_graphics:0}
 Source4:	g%{name}.desktop
 Patch0:		%{name}-links-g_if_glinks.patch
 Patch1:		%{name}-ac.patch
 Patch2:		%{name}-ac25x.patch
-%endif
+Patch3:		%{name}-current-reallyquit.patch
 URL:		http://atrey.karlin.mff.cuni.cz/~clock/twibright/links
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -76,7 +75,7 @@ ale mimo wszystko inn±:
 - moøe ∂ci±gaÊ pliki w tle.
 
 %{!?_without_graphics:Ta wersja moøe pracowaÊ w trybie graficznym.}
-%{!?_without_javascript:Ta wersja posiada wsparcie dla JavaScript.}
+%{!?_without_javascript:Ta wersja obs≥uguje JavaScript.}
 
 %description -l pt_BR
 Links È um browser WWW modo texto, similar ao Lynx. O Links exibe
@@ -106,17 +105,18 @@ Links - √≈ ‘≈À”‘œ◊…  WWW ¬“œ’⁄≈“, Œ¡ –≈“€…  –œ«Ã—ƒ ”»œ÷…  Œ¡ Lynx, ¡Ã≈
 %{!?_without_graphics:%patch0 -p1}
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %build
 rm -f mssing
 aclocal
-automake -a -c -f
-autoconf
+%{__automake}
+%{__autoconf}
 if [ -f %{_pkgconfigdir}/libpng12.pc ] ; then
     CPPFLAGS="`pkg-config libpng12 --cflags`"; export CPPFLAGS
 fi
 %configure \
-    %{!?_wihout_graphics:--enable-graphics} \
+    %{!?_without_graphics:--enable-graphics} \
     %{!?_without_javascript:--enable-javascript} \
 		%{?_without_svgalib:--without-svgalib} \
 		%{?_without_x:--without-x} \
@@ -147,7 +147,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS BUGS ChangeLog README SITES TODO NEWS
+%doc AUTHORS BUGS ChangeLog README SITES TODO
 %attr(755,root,root) %{_bindir}/*
 %{_applnkdir}/Network/WWW/*
 %{_mandir}/man*/*
