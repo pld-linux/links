@@ -14,8 +14,7 @@ Source0:	http://artax.karlin.mff.cuni.cz/~mikulas/links/download/%{name}-%{versi
 Source1:	%{name}.desktop
 Source2:	%{name}.1.pl
 Source3:	%{name}.png
-Patch0:		http://www.misiek.eu.org/ipv6/%{name}-0.92-ipv6-20000921.patch.gz
-Patch1:		%{name}-dump_codepage.patch
+Patch0:		%{name}-dump_codepage.patch
 URL:		http://artax.karlin.mff.cuni.cz/~mikulas/links/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -74,7 +73,7 @@ Links - це текстовий WWW броузер, на перший погляд схожий на Lynx, але
 
 %prep
 %setup -q
-%patch1 -p1
+%patch0 -p1
 
 %build
 rm -f mssing
@@ -88,19 +87,20 @@ automake -a -c -f
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_applnkdir}/Network/WWW,%{_pixmapsdir},%{_mandir}/pl/man1}
 
-%{__make} install DESTDIR=$RPM_BUILD_ROOT
+%{__make} install \
+	DESTDIR=$RPM_BUILD_ROOT
 
 install %{SOURCE1} $RPM_BUILD_ROOT%{_applnkdir}/Network/WWW
 install %{SOURCE2} $RPM_BUILD_ROOT%{_mandir}/pl/man1/links.1
 install %{SOURCE3} $RPM_BUILD_ROOT%{_pixmapsdir}
-gzip -9nf AUTHORS BUGS ChangeLog README SITES TODO
+
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc *.gz
+%doc AUTHORS BUGS ChangeLog README SITES TODO
 %attr(755,root,root) %{_bindir}/*
 %{_applnkdir}/Network/WWW/*
 %{_mandir}/man*/*
