@@ -5,13 +5,13 @@ Summary(pt_BR):	O links И um browser para modo texto, similar ao lynx
 Summary(ru):	Текстовый WWW броузер типа Lynx
 Summary(uk):	Текстовий WWW броузер типу Lynx
 Name:		links
-Version:	0.99pre13
+Version:	0.99pre14
 Release:	1
 Epoch:		1
 License:	GPL v2
 Group:		Applications/Networking
 Source0:	http://artax.karlin.mff.cuni.cz/~mikulas/links/download/%{name}-%{version}.tar.gz
-# Source0-md5:	3da202f9c1c855f30d0f60d92bf35e03
+# Source0-md5:	056060b721a140ae5a5bd3573982945a
 Source1:	%{name}.desktop
 Source2:	%{name}.1.pl
 Source3:	%{name}.png
@@ -87,7 +87,6 @@ Links - це текстовий WWW броузер, на перший погляд схожий на Lynx, але
 #%patch4 -p1
 
 %build
-rm -f missing
 %{__aclocal}
 %{__autoconf}
 %{__automake}
