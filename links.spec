@@ -2,13 +2,14 @@ Summary:	Lynx-like text WWW browser
 Summary(pl):	Podobna do Lynksa tekstowa przegl±darka WWW
 Name:		links
 Version:	0.96
-Release:	3
+Release:	4
 Epoch:		1
 License:	GPL
 Group:		Applications/Networking
 Source0:	http://artax.karlin.mff.cuni.cz/~mikulas/links/download/%{name}-%{version}.tar.gz
 Source1:	%{name}.desktop
 Source2:	%{name}.1.pl
+Source3:	http.png
 Patch0:		http://www.misiek.eu.org/ipv6/%{name}-0.92-ipv6-20000921.patch.gz
 URL:		http://artax.karlin.mff.cuni.cz/~mikulas/links/
 BuildRequires:	autoconf
@@ -50,13 +51,13 @@ automake -a -c
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_applnkdir}/Network/WWW,%{_mandir}/pl/man1}
+install -d $RPM_BUILD_ROOT{%{_applnkdir}/Network/WWW,%{_pixmapsdir},%{_mandir}/pl/man1}
 
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
 
 install %{SOURCE1} $RPM_BUILD_ROOT%{_applnkdir}/Network/WWW
 install %{SOURCE2} $RPM_BUILD_ROOT%{_mandir}/pl/man1/links.1
-
+install %{SOURCE3} $RPM_BUILD_ROOT%{_pixmapsdir}
 gzip -9nf AUTHORS BUGS ChangeLog README SITES TODO
 
 %clean
@@ -69,3 +70,4 @@ rm -rf $RPM_BUILD_ROOT
 %{_applnkdir}/Network/WWW/*
 %{_mandir}/man*/*
 %lang(pl) %{_mandir}/pl/man*/*
+%{_pixmapsdir}/http.png
