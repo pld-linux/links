@@ -11,7 +11,7 @@ Source1:	%{name}.desktop
 Source2:	%{name}.1.pl
 Source3:	%{name}.png
 Patch0:		http://www.misiek.eu.org/ipv6/%{name}-0.92-ipv6-20000921.patch.gz
-Patch1:		%{name}-%{version}-dump_codepage.patch
+Patch1:		%{name}-dump_codepage.patch
 URL:		http://artax.karlin.mff.cuni.cz/~mikulas/links/
 BuildRequires:	autoconf
 BuildRequires:	automake
