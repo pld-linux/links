@@ -2,7 +2,7 @@ Summary:	Lynx-like text WWW browser
 Summary(pl):	Podobna do Lynxa tekstowa przegl±darka WWW
 Name:		links
 Version:	0.82
-Release:	1
+Release:	2
 License:	GPL
 Group:		Applications/Networking
 Group(pl):	Aplikacje/Sieciowe
@@ -11,6 +11,7 @@ Patch0:		links-home_etc.patch
 URL:		http://artax.karlin.mff.cuni.cz/~mikulas/links/
 BuildRequires:	gpm-devel
 BuildRequires:	ncurses-devel => 5.0
+Provides:	webclient
 BuildRoot:	/tmp/%{name}-%{version}-root
 
 %description
