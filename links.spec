@@ -21,7 +21,7 @@ Summary(ru):	Текстовый WWW броузер типа Lynx
 Summary(uk):	Текстовий WWW броузер типу Lynx
 Name:		links
 Version:	current
-Release:	%{_snap}.2
+Release:	%{_snap}.3
 Epoch:		1
 License:	GPL v2
 Group:		Applications/Networking
@@ -29,7 +29,10 @@ Source0:	http://atrey.karlin.mff.cuni.cz/%7Eclock/twibright/%{name}/download/%{n
 Source1:	%{name}.desktop
 Source2:	%{name}.1.pl
 Source3:	%{name}.png
-%{!?_without_graphics:Source4:	g%{name}.desktop}
+%if%{!?_without_graphics:1}%{?_without_graphics:0}
+Source4:	g%{name}.desktop
+Patch0:		%{name}-links-g_if_glinks.patch
+%endif
 URL:		http://atrey.karlin.mff.cuni.cz/%7Eclock/twibright/links
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -95,6 +98,7 @@ Links - це текстовий WWW броузер, на перший погляд схожий на Lynx, але
 
 %prep
 %setup -q
+%{!?_without_graphics:%patch0 -p1}
 
 %build
 #rm -f mssing
@@ -121,15 +125,9 @@ install -d $RPM_BUILD_ROOT{%{_applnkdir}/Network/WWW,%{_pixmapsdir},%{_mandir}/p
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
 
 %if%{!?_without_graphics:1}%{?_without_graphics:0}
-# glinks script (executes links -g)
-cat > $RPM_BUILD_ROOT%{_bindir}/glinks << EOF
-#!/bin/sh
-exec %{_bindir}/links -g "\$@"
-EOF
-
+ln -sf links $RPM_BUILD_ROOT%{_bindir}/glinks
 echo ".so links.1" > $RPM_BUILD_ROOT%{_mandir}/man1/glinks.1
 echo ".so links.1" > $RPM_BUILD_ROOT%{_mandir}/pl/man1/glinks.1
-
 install %{SOURCE4} $RPM_BUILD_ROOT%{_applnkdir}/Network/WWW
 %endif
 
