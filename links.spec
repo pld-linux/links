@@ -39,7 +39,7 @@ Lynksa, ale mimo wszystko inn±:
 - mo¿e ¶ci±gaæ pliki w tle.
 
 %prep
-%setup  -q
+%setup -q
 #%patch0 -p1
 
 %build
@@ -62,7 +62,7 @@ gzip -9nf AUTHORS BUGS ChangeLog README SITES TODO
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%files 
+%files
 %defattr(644,root,root,755)
 %doc *.gz
 %attr(755,root,root) %{_bindir}/*
