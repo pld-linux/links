@@ -10,13 +10,13 @@
  AC_CHECK_LIB(dl, dlopen)
  #ifdef HAVE_SSL
  AC_ARG_WITH(ssl, [  --without-ssl           disable SSL support], [if test "$withval" = no; then disable_ssl=yes; fi])
---- links-0.97/file.c	Wed Jan 30 14:53:48 2002
-+++ links-0.97/file.c.new	Wed Jul  3 10:44:03 2002
-@@ -203,9 +203,14 @@
- 	if (!(name = get_filename(c->url))) {
- 		setcstate(c, S_OUT_OF_MEM); abort_connection(c); return;
+--- links-1.00pre11/file.c.orig	2004-06-29 03:33:49.000000000 +0200
++++ links-1.00pre11/file.c	2004-10-25 18:39:07.709892504 +0200
+@@ -221,9 +221,14 @@
+ 		mem_free(name);
+ 		setcstate(c, S_FILE_TYPE); abort_connection(c); return;
  	}
-+opening:	
++opening:
  	if ((h = open(name, O_RDONLY | O_NOCTTY)) == -1) {
  		int er = errno;
  		if ((d = opendir(name))) goto dir;
@@ -27,11 +27,14 @@
  		mem_free(name);
  		setcstate(c, -er); abort_connection(c); return;
  	}
-@@ -339,21 +344,51 @@
- 		close(h);
- 		setcstate(c, S_FILE_TYPE); abort_connection(c); return;
+@@ -348,8 +353,41 @@
+ 		add_to_str(&file, &fl, "</pre></body></html>\n");
+ 		head = stracpy("\r\nContent-Type: text/html\r\n");
  	} else {
--		mem_free(name);
++		if ((int)stt.st_size != stt.st_size || (int)stt.st_size < 0) {
++			mem_free(name);
++			goto nm;
++		}
 +#ifdef HAVE_ZLIB_H
 +		if (strncmp(name + strlen(name) - 3, ".gz", 3) == 0) {
 +		/* decompression */
@@ -42,7 +45,7 @@
 +				close(h);
 +				setcstate(c, S_OUT_OF_MEM); abort_connection(c); return;
 +			}
-+			if (!(file = mem_alloc(stt.st_size + 1))) {
++			if (!(file = mem_alloc(stt.st_size + !stt.st_size))) {
 +				gzclose(gh);
 +				setcstate(c, S_OUT_OF_MEM); abort_connection(c); return;
 +			}
@@ -62,31 +65,16 @@
 +		else 
 +#endif
 +		{
- 		/* + 1 is there because of bug in Linux. Read returns -EACCES when
- 		   reading 0 bytes to invalid address */
--		if (!(file = mem_alloc(stt.st_size + 1))) {
-+		    if (!(file = mem_alloc(stt.st_size + 1))) {
-+				close(h);
-+				setcstate(c, S_OUT_OF_MEM); abort_connection(c); return;
-+			}
-+			if ((r = read(h, file, stt.st_size)) != stt.st_size) {
-+				mem_free(file); close(h);
-+				setcstate(c, r == -1 ? -errno : S_FILE_ERROR);
-+				abort_connection(c); return;
-+			}
- 			close(h);
--			setcstate(c, S_OUT_OF_MEM); abort_connection(c); return;
--		}
--		if ((r = read(h, file, stt.st_size)) != stt.st_size) {
--			mem_free(file); close(h);
--			setcstate(c, r == -1 ? -errno : S_FILE_ERROR);
--			abort_connection(c); return;
-+			fl = stt.st_size;
-+			head = stracpy("");
- 		}
--		close(h);
--		fl = stt.st_size;
--		head = stracpy("");
+ 		mem_free(name);
+-		if ((int)stt.st_size != stt.st_size || (int)stt.st_size < 0) goto nm;
+ 		/* + !stt.st_size is there because of bug in Linux. Read returns
+ 		   -EACCES when reading 0 bytes to invalid address */
+ 		if (!(file = mem_alloc(stt.st_size + !stt.st_size))) {
+@@ -365,6 +403,7 @@
+ 		close(h);
+ 		fl = stt.st_size;
+ 		head = stracpy("");
++		}
  	}
  	if (get_cache_entry(c->url, &e)) {
  		mem_free(file);
