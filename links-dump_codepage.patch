@@ -1,7 +1,7 @@
 diff -urN /tmp/links-0.96/default.c links-0.96/default.c
 --- /tmp/links-0.96/default.c	Sun Apr  8 22:46:18 2001
 +++ links-0.96/default.c	Wed Mar  6 18:56:09 2002
-@@ -898,6 +898,7 @@
+@@ -910,6 +910,7 @@
  	1, gen_cmd, num_rd, num_wr, 0, 1, &http_bugs.bug_post_no_keepalive, "http_bugs.bug_post_no_keepalive", "http-bugs.bug_post-no-keepalive",
  	1, gen_cmd, str_rd, str_wr, 0, MAX_STR_LEN, default_anon_pass, "ftp.anonymous_password", "ftp.anonymous-password",
  	1, gen_cmd, cp_rd, NULL, 0, 0, &dds.assume_cp, "assume_codepage", "assume-codepage",
@@ -12,7 +12,7 @@ diff -urN /tmp/links-0.96/default.c links-0.96/default.c
 diff -urN /tmp/links-0.96/links.h links-0.96/links.h
 --- /tmp/links-0.96/links.h	Mon Jun 11 12:14:25 2001
 +++ links-0.96/links.h		Wed Mar  6 18:56:09 2002
-@@ -1081,6 +1081,8 @@
+@@ -1107,6 +1107,8 @@
  
  extern int retval;
  
@@ -33,7 +33,7 @@ diff -urN /tmp/links-0.96/main.c links-0.96/main.c
  void unhandle_basic_signals(struct terminal *);
  
  void sig_terminate(struct terminal *t)
-@@ -201,7 +203,7 @@
+@@ -199,7 +201,7 @@
  		o.xw = 80;
  		o.yw = 25;
  		o.col = 0;
