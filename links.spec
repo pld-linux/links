@@ -25,7 +25,7 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	gpm-devel
 BuildRequires:	ncurses-devel >= 5.1
-BuildRequires:	openssl-devel >= 0.9.7
+BuildRequires:	openssl-devel >= 0.9.7c
 BuildRequires:	zlib-devel
 Provides:	webclient
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
