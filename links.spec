@@ -41,6 +41,8 @@ BuildRequires:	zlib-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libjpeg-devel
 BuildRequires:	libtiff-devel
+%{!?_without_javascript:BuildRequires: flex}
+%{!?_without_javascript:BuildRequires: bison}
 %{!?_without_svgalib:BuildRequires:  svgalib-devel}
 %{!?_without_x:BuildRequires:  XFree86-devel}
 %endif
