@@ -7,9 +7,6 @@
 # _without_fb - compile without Linux Framebuffer graphics driver
 # _without_pmshell - compile without PMShell graphics driver
 # _without_atheos - compile without Atheos graphics driver
-#
-# TODO:
-#  - s/configure2_13/configure/
 
 %define _snap 20020516
 
@@ -21,7 +18,7 @@ Summary(ru):	Текстовый WWW броузер типа Lynx
 Summary(uk):	Текстовий WWW броузер типу Lynx
 Name:		links
 Version:	current
-Release:	%{_snap}.3
+Release:	%{_snap}.4
 Epoch:		1
 License:	GPL v2
 Group:		Applications/Networking
@@ -32,6 +29,8 @@ Source3:	%{name}.png
 %if%{!?_without_graphics:1}%{?_without_graphics:0}
 Source4:	g%{name}.desktop
 Patch0:		%{name}-links-g_if_glinks.patch
+Patch1:		%{name}-ac.patch
+Patch2:		%{name}-ac25x.patch
 %endif
 URL:		http://atrey.karlin.mff.cuni.cz/~clock/twibright/links
 BuildRequires:	autoconf
@@ -105,16 +104,18 @@ Links - це текстовий WWW броузер, на перший погляд схожий на Lynx, але
 %prep
 %setup -q
 %{!?_without_graphics:%patch0 -p1}
+%patch1 -p1
+%patch2 -p1
 
 %build
-#rm -f mssing
-#aclocal
-#automake -a -c -f
-#autoconf
+rm -f mssing
+aclocal
+automake -a -c -f
+autoconf
 if [ -f %{_pkgconfigdir}/libpng12.pc ] ; then
     CPPFLAGS="`pkg-config libpng12 --cflags`"; export CPPFLAGS
 fi
-%configure2_13 \
+%configure \
     %{!?_wihout_graphics:--enable-graphics} \
     %{!?_without_javascript:--enable-javascript} \
 		%{?_without_svgalib:--without-svgalib} \
@@ -140,14 +141,13 @@ install %{SOURCE4} $RPM_BUILD_ROOT%{_applnkdir}/Network/WWW
 install %{SOURCE1} $RPM_BUILD_ROOT%{_applnkdir}/Network/WWW
 install %{SOURCE2} $RPM_BUILD_ROOT%{_mandir}/pl/man1/links.1
 install %{SOURCE3} $RPM_BUILD_ROOT%{_pixmapsdir}
-gzip -9nf AUTHORS BUGS ChangeLog README SITES TODO NEWS
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc *.gz
+%doc AUTHORS BUGS ChangeLog README SITES TODO NEWS
 %attr(755,root,root) %{_bindir}/*
 %{_applnkdir}/Network/WWW/*
 %{_mandir}/man*/*
