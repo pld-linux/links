@@ -11,7 +11,7 @@ Epoch:		1
 License:	GPL v2
 Group:		Applications/Networking
 Source0:	http://artax.karlin.mff.cuni.cz/~mikulas/links/download/%{name}-%{version}.tar.gz
-# Source0-md5:	c6add88c9224a1f6670cbb7c6170e32e
+# Source0-md5:	3da202f9c1c855f30d0f60d92bf35e03
 Source1:	%{name}.desktop
 Source2:	%{name}.1.pl
 Source3:	%{name}.png
