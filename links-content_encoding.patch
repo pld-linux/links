@@ -1,11 +1,11 @@
---- links-0.97/Makefile.am	Wed Jan 30 14:53:38 2002
-+++ links-0.97.newer/Makefile.am	Wed Jul  3 19:29:51 2002
+--- links-0.99pre12/Makefile.am	Wed Jan 30 14:53:38 2002
++++ links-0.99pre12.newer/Makefile.am	Wed Jul  3 19:29:51 2002
 @@ -8,7 +8,7 @@
  EXTRA_DIST=$(man_MANS) Unicode/* intl/* config2.h Makefile.gen BUGS TODO SITES mailcap.pl wipe-out-ssl wipe-out-ssl.awk
  
  bin_PROGRAMS=links
--links_SOURCES=af_unix.c beos.c bfu.c bookmarks.c cache.c charsets.c connect.c cookies.c default.c dns.c error.c file.c finger.c ftp.c html.c html_r.c html_tbl.c http.c https.c kbd.c kbdbind.c language.c mailto.c main.c menu.c os_dep.c sched.c select.c session.c terminal.c types.c url.c view.c win32.c links.h os_dep.h os_depx.h setup.h codepage.h language.h codepage.inc entity.inc uni_7b.inc language.inc rebuild
-+links_SOURCES=af_unix.c beos.c bfu.c bookmarks.c cache.c charsets.c compress.c connect.c cookies.c default.c dns.c error.c file.c finger.c ftp.c html.c html_r.c html_tbl.c http.c https.c kbd.c kbdbind.c language.c mailto.c main.c menu.c os_dep.c sched.c select.c session.c terminal.c types.c url.c view.c win32.c links.h os_dep.h os_depx.h setup.h codepage.h language.h codepage.inc entity.inc uni_7b.inc language.inc rebuild
+-links_SOURCES=af_unix.c beos.c bfu.c bookmarks.c cache.c charsets.c connect.c cookies.c default.c dns.c error.c file.c finger.c ftp.c html.c html_r.c html_tbl.c http.c https.c kbd.c kbdbind.c language.c mailto.c main.c menu.c os_dep.c sched.c select.c session.c smb.c terminal.c types.c url.c view.c win32.c links.h os_dep.h os_depx.h setup.h codepage.h language.h codepage.inc entity.inc uni_7b.inc language.inc rebuild
++links_SOURCES=af_unix.c beos.c bfu.c bookmarks.c cache.c charsets.c compress.c connect.c cookies.c default.c dns.c error.c file.c finger.c ftp.c html.c html_r.c html_tbl.c http.c https.c kbd.c kbdbind.c language.c mailto.c main.c menu.c os_dep.c sched.c select.c session.c smb.c terminal.c types.c url.c view.c win32.c links.h os_dep.h os_depx.h setup.h codepage.h language.h codepage.inc entity.inc uni_7b.inc language.inc rebuild
  
  datadir = $(prefix)/@DATADIRNAME@
  LIBS = @LIBS@
