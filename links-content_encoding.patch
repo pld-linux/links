@@ -1,0 +1,308 @@
+--- links-0.97/Makefile.am	Wed Jan 30 14:53:38 2002
++++ links-0.97.newer/Makefile.am	Wed Jul  3 19:29:51 2002
+@@ -8,7 +8,7 @@
+ EXTRA_DIST=$(man_MANS) Unicode/* intl/* config2.h Makefile.gen BUGS TODO SITES mailcap.pl wipe-out-ssl wipe-out-ssl.awk
+ 
+ bin_PROGRAMS=links
+-links_SOURCES=af_unix.c beos.c bfu.c bookmarks.c cache.c charsets.c connect.c cookies.c default.c dns.c error.c file.c finger.c ftp.c html.c html_r.c html_tbl.c http.c https.c kbd.c kbdbind.c language.c mailto.c main.c menu.c os_dep.c sched.c select.c session.c terminal.c types.c url.c view.c win32.c links.h os_dep.h os_depx.h setup.h codepage.h language.h codepage.inc entity.inc uni_7b.inc language.inc rebuild
++links_SOURCES=af_unix.c beos.c bfu.c bookmarks.c cache.c charsets.c compress.c connect.c cookies.c default.c dns.c error.c file.c finger.c ftp.c html.c html_r.c html_tbl.c http.c https.c kbd.c kbdbind.c language.c mailto.c main.c menu.c os_dep.c sched.c select.c session.c terminal.c types.c url.c view.c win32.c links.h os_dep.h os_depx.h setup.h codepage.h language.h codepage.inc entity.inc uni_7b.inc language.inc rebuild
+ 
+ datadir = $(prefix)/@DATADIRNAME@
+ LIBS = @LIBS@
+--- /dev/null	Tue May  5 22:32:27 1998
++++ links-0.97.newer/compress.c	Wed Jul  3 19:28:29 2002
+@@ -0,0 +1,166 @@
++#include "links.h"
++
++#define WMAXBITS 15
++#define ASCII_FLAG 0x01
++#define HEAD_CRC 0x02
++#define EXTRA_FIELD 0x04
++#define ORIG_NAME 0x08
++#define COMMENT 0x10
++#define RESERVED 0xE0
++
++static void *
++z_mem_alloc(void *opaque, int items, int size)
++{
++   return mem_alloc(items * size);
++}
++   
++static void z_mem_free(void *opaque, void *address)
++{
++   mem_free(address);
++}
++      
++
++
++static z_streamp gzip_init(unsigned char *buf_old, int l)
++{
++
++/* check header */
++/* gzip magic */
++  unsigned char method;
++  unsigned char flags;
++  unsigned char *buf = buf_old;
++  int len;
++  int ret;
++  z_streamp z;
++
++  if (buf[0] != 0x1f || buf[1] != 0x8b) return NULL;
++
++  method = buf[2];
++  flags = buf[3];
++
++  if (method != Z_DEFLATED || (flags & RESERVED) != 0) return NULL;
++
++/* Comments are borrowed from gzio.c - zlib */
++/* Discard time, xflags and OS code: */
++  buf += 10;
++  l -= 10;
++
++  if ((flags & EXTRA_FIELD) != 0) { /* skip the extra field */
++     len  =  2 + buf[0] + (buf[1] << 8);
++     buf += len;
++     l -= len;
++  }
++  if (l <= 0) return NULL;
++
++  if ((flags & ORIG_NAME) != 0) {/* skip the original file name */
++     len = strlen(buf) + 1;
++     buf += len;
++     l -= len;
++  }
++  if (l <= 0) return NULL;
++
++  if ((flags & COMMENT) != 0) {/* skip the .gz file comment */
++     len = strlen(buf) + 1;
++     buf += len;
++     l -= len;
++  }
++  if (l <= 0) return NULL;
++
++  if ((flags & HEAD_CRC) != 0) {  /* skip the header crc */
++     buf += 2;
++     l -= 2;
++  }
++  if (l <= 0) return NULL;
++
++/* initialization of z_stream */
++  z = (z_streamp)mem_alloc(sizeof(z_stream));
++  if (!z) return NULL;
++
++  z->opaque = NULL;
++  z->zalloc = (alloc_func)z_mem_alloc;
++  z->zfree = (free_func)z_mem_free;
++  z->avail_in = l;
++  z->next_in = buf;
++/* windowBits is passed < 0 to tell that there is no zlib header.
++ * Note that in this case inflate *requires* an extra "dummy" byte
++ * after the compressed stream in order to complete decompression and
++ * return Z_STREAM_END. Here the gzip CRC32 ensures that 4 bytes are
++ * present after the compressed stream.
++ */
++  ret = inflateInit2(z, -WMAXBITS);
++  if (ret == Z_OK) return z;
++
++  mem_free(z);
++  return NULL;
++}
++
++#define OUTPUT_BUFFER_SIZE 65536
++
++unsigned char *decompress_gzip(z_streamp *z, unsigned char *buf, int l, int *dl)
++{
++   unsigned char *output;
++   int cur_size;
++   int new_size;
++   int ret;
++
++   if (!*z) {
++      *z = gzip_init(buf, l);
++      if (!*z) {
++         *dl = -1;
++         return NULL;
++      }
++   }
++   else {
++      (*z)->next_in = buf;
++      (*z)->avail_in = l;
++   }
++  
++   (*z)->total_out = 0L;
++   cur_size = OUTPUT_BUFFER_SIZE;
++   output = mem_alloc(cur_size); /* output will be freed in http_read_data */
++   if (!output) {
++      inflateEnd(*z);
++      mem_free(*z);
++      *z = NULL;
++      *dl = -2;
++      return NULL;
++   }
++
++   (*z)->next_out = output;
++   (*z)->avail_out = 65536;
++   
++   ret = inflate(*z, Z_SYNC_FLUSH);
++   while (ret == Z_OK) {
++      if (!(*z)->avail_in) {
++         *dl = (int)(*z)->total_out;
++         return output;
++      }
++
++      new_size = cur_size + OUTPUT_BUFFER_SIZE;
++      output = mem_realloc(output, new_size);
++      if (!output) {
++         inflateEnd(*z);
++         mem_free(*z);
++         *z = NULL;
++         *dl = -3;
++         return NULL;
++      }
++
++      (*z)->next_out = output + cur_size; /* assume that z->avail_out == 0 */
++      (*z)->avail_out = OUTPUT_BUFFER_SIZE;
++      cur_size = new_size;
++      ret = inflate(*z, Z_SYNC_FLUSH);
++   }
++   
++   if (ret == Z_STREAM_END) *dl = (int)(*z)->total_out;
++   else { /* something went wrong */
++      *dl = -4;
++      mem_free(output);
++      output = NULL;
++   }
++
++   inflateEnd(*z);
++   mem_free(*z);
++   *z = NULL;
++   return output;
++}
++             
+--- links-0.97/http.c	Tue Mar 26 22:49:22 2002
++++ links-0.97.newer/http.c	Wed Jul  3 19:28:07 2002
+@@ -262,6 +262,7 @@
+ 	}
+ 	add_to_str(&hdr, &l, ")\r\n");
+ 	add_to_str(&hdr, &l, "Accept: */*\r\n");
++   add_to_str(&hdr, &l, "Accept-Encoding: gzip\r\n");
+ 	if (!(accept_charset)) {
+ 		int i;
+ 		unsigned char *cs, *ac;
+@@ -359,9 +360,25 @@
+ 		int l = rb->len;
+ 		if (info->length >= 0 && info->length < l) l = info->length;
+ 		c->received += l;
+-		if (add_fragment(c->cache, c->from, rb->data, l) == 1) c->tries = 0;
++//		if (add_fragment(c->cache, c->from, rb->data, l) == 1) c->tries = 0;
++      if (l) {
++         if (c->gzip) {
++            int dl;
++            unsigned char *data = decompress_gzip(&c->z, rb->data, l, &dl);
++            if (!data) {
++               setcstate(c, S_OUT_OF_MEM);
++               abort_connection(c);
++               return;
++            }
++            if (add_fragment(c->cache, c->from, data, dl) == 1) c->tries = 0;
++            mem_free(data);
++            c->from += dl;
++         }
++         if (add_fragment(c->cache, c->from, rb->data, l) == 1) c->tries = 0;
++         c->from += l;
++      }       
+ 		if (info->length >= 0) info->length -= l;
+-		c->from += l;
++//		c->from += l;
+ 		kill_buffer_data(rb, l);
+ 		if (!info->length && !rb->close) {
+ 			setcstate(c, S_OK);
+@@ -405,9 +422,25 @@
+ 			int l = info->chunk_remaining;
+ 			if (l > rb->len) l = rb->len;
+ 			c->received += l;
+-			if (add_fragment(c->cache, c->from, rb->data, l) == 1) c->tries = 0;
++//			if (add_fragment(c->cache, c->from, rb->data, l) == 1) c->tries = 0;
+ 			info->chunk_remaining -= l;
+-			c->from += l;
++//			c->from += l;
++         if (c->gzip) {
++            int dl;
++            unsigned char *data = decompress_gzip(&c->z, rb->data, l, &dl);
++            if (!data) {
++               setcstate(c, S_OUT_OF_MEM);
++               abort_connection(c);
++               return;
++            }
++            if (add_fragment(c->cache, c->from, data, dl) == 1) c->tries = 0;
++            mem_free(data);
++            c->from += dl;
++         } else {
++            if (add_fragment(c->cache, c->from, rb->data, l) == 1) c->tries = 0;
++            c->from += l;
++         }
++            
+ 			kill_buffer_data(rb, l);
+ 			if (!info->chunk_remaining && rb->len >= 1) {
+ 				if (rb->data[0] == 10) kill_buffer_data(rb, 1);
+@@ -635,6 +668,18 @@
+ 	if (!e->last_modified && (d = parse_http_header(e->head, "Date", NULL)))
+ 		e->last_modified = d;
+ 	if (info->length == -1 || (version < 11 && info->close)) rb->close = 1;
++   d = parse_http_header(e->head, "Content-Encoding", NULL);
++   c->gzip = 0;
++   if (d) {
++      if (!strcasecmp(d, "gzip") || !strcasecmp(d, "x-gzip")) {
++         mem_free(d);
++         d = parse_http_header(e->head, "Content-Type", NULL);
++         if (d) {
++            if (!strncasecmp(d, "text", 4)) c->gzip = 1;
++            mem_free(d);
++         }
++      }
++   } 
+ 	read_http_data(c, rb);
+ }
+ 
+--- links-0.97/links.h	Wed Jul  3 19:31:24 2002
++++ links-0.97.newer/links.h	Wed Jul  3 18:59:03 2002
+@@ -92,13 +92,14 @@
+ #endif
+ 
+ #include <termios.h>
+-
+ #ifdef HAVE_SSL
+ #include <openssl/ssl.h>
+ #endif
+ 
+ #ifdef HAVE_ZLIB_H
+ #include <zlib.h>
++unsigned char *decompress_gzip(z_streamp *, unsigned char *, int, int *);
++
+ #endif
+ 
+ #include "os_depx.h"
+@@ -684,6 +685,8 @@
+ 	SSL *ssl;
+ 	int no_tsl;
+ #endif
++   int gzip;
++   z_streamp z;
+ };
+ 
+ static inline int getpri(struct connection *c)
+--- links-0.97/sched.c	Wed Mar 27 00:32:49 2002
++++ links-0.97.newer/sched.c	Wed Jul  3 18:26:17 2002
+@@ -220,7 +220,11 @@
+ {
+ 	del_from_list(c);
+ 	send_connection_info(c);
+-	mem_free(c->url);
++	if (c->z) {
++      inflateEnd(c->z);
++      mem_free(c->z);
++   }
++   mem_free(c->url);
+ 	mem_free(c);
+ }
+ 
