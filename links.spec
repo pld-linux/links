@@ -13,9 +13,9 @@
 
 %define _snap 20020516
 
-Summary:	Lynx-like text WWW browser
+Summary:	Lynx-like WWW browser
 Summary(es):	El links es un browser para modo texto, similar a lynx.
-Summary(pl):	Podobna do Lynksa tekstowa przegl±darka WWW
+Summary(pl):	Podobna do Lynksa przegl±darka WWW
 Summary(pt_BR):	O links È um browser para modo texto, similar ao lynx.
 Summary(ru):	Ù≈À”‘œ◊Ÿ  WWW ¬“œ’⁄≈“ ‘…–¡ Lynx
 Summary(uk):	Ù≈À”‘œ◊…  WWW ¬“œ’⁄≈“ ‘…–’ Lynx
@@ -25,7 +25,7 @@ Release:	%{_snap}.3
 Epoch:		1
 License:	GPL v2
 Group:		Applications/Networking
-Source0:	http://atrey.karlin.mff.cuni.cz/%7Eclock/twibright/%{name}/download/%{name}-%{version}.tar.bz2
+Source0:	http://atrey.karlin.mff.cuni.cz/~clock/twibright/%{name}/download/%{name}-%{version}.tar.bz2
 Source1:	%{name}.desktop
 Source2:	%{name}.1.pl
 Source3:	%{name}.png
@@ -33,7 +33,7 @@ Source3:	%{name}.png
 Source4:	g%{name}.desktop
 Patch0:		%{name}-links-g_if_glinks.patch
 %endif
-URL:		http://atrey.karlin.mff.cuni.cz/%7Eclock/twibright/links
+URL:		http://atrey.karlin.mff.cuni.cz/~clock/twibright/links
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	gpm-devel
@@ -51,13 +51,16 @@ Provides:	webclient
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
-Links is a text based WWW browser, at first look similiar to Lynx, but
-somehow different:
+Links is a WWW browser, at first look similiar to Lynx, but somehow
+different:
 
 - renders tables and frames,
 - displays colors as specified in current HTML page,
 - uses drop-down menu (like in Midnight Commander),
 - can download files in background.
+
+%{!?_without_graphics:This version can work in graphical mode.}
+%{!?_without_javascript:This version has support for JavaScript.}
 
 %description -l es
 Links es un browser WWW modo texto, similar al Lynx. El links muestra
@@ -65,13 +68,16 @@ tablas, hace baja archivos en segundo plano, y usa conexiones HTTP/1.1
 keepalive.
 
 %description -l pl
-Links jest tekstow± przegl±dark± WWW, na pierwszy rzut oka podobn± do
-Lynksa, ale mimo wszystko inn±:
+Links jest przegl±dark± WWW, na pierwszy rzut oka podobn± do Lynksa,
+ale mimo wszystko inn±:
 
 - renderuje tabelki i ramki,
 - wy∂wietla kolory zgodnie z definicjami w ogl±danej stronie HTML,
 - uøywa opuszczanego menu (jak w Midnight Commanderze),
 - moøe ∂ci±gaÊ pliki w tle.
+
+%{!?_without_graphics:Ta wersja moøe pracowaÊ w trybie graficznym.}
+%{!?_without_javascript:Ta wersja posiada wsparcie dla JavaScript.}
 
 %description -l pt_BR
 Links È um browser WWW modo texto, similar ao Lynx. O Links exibe
