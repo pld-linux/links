@@ -14,15 +14,15 @@ Source0:	http://artax.karlin.mff.cuni.cz/~mikulas/links/download/%{name}-%{versi
 Source1:	%{name}.desktop
 Source2:	%{name}.1.pl
 Source3:	%{name}.png
+URL:		http://artax.karlin.mff.cuni.cz/~mikulas/links/
 Patch0:		http://www.misiek.eu.org/ipv6/%{name}-0.92-ipv6-20000921.patch.gz
 Patch1:		%{name}-dump_codepage.patch
 Patch2:		%{name}-gzip_fallback.patch
 Patch3:		%{name}-content_encoding.patch
-URL:		http://artax.karlin.mff.cuni.cz/~mikulas/links/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	gpm-devel
-BuildRequires:	ncurses-devel => 5.1
+BuildRequires:	ncurses-devel >= 5.1
 BuildRequires:	openssl-devel >= 0.9.6a
 BuildRequires:	zlib-devel
 Provides:	webclient
@@ -60,19 +60,19 @@ HTTP/1.1 keepalive.
 Links - это текстовый WWW броузер, на первый взгляд похожий на Lynx,
 но несколько отличающийся:
 
-- отображает таблицы и (скоро) фреймы
-- показывает цвета как указано в HTML странице
-- использует выпадающие меню (как в Midnight Commander)
-- может загружать файлы в фоне
+- отображает таблицы и (скоро) фреймы,
+- показывает цвета как указано в HTML странице,
+- использует выпадающие меню (как в Midnight Commander),
+- может загружать файлы в фоне.
 
 %description -l uk
 Links - це текстовий WWW броузер, на перший погляд схожий на Lynx, але
 трохи в╕дм╕нний в╕д нього:
 
-- в╕добража╓ таблиц╕ та (незабаром) фрейми
-- показу╓ кольори як вказано в HTML стор╕нц╕
-- використову╓ випадаюч╕ меню (як в Midnight Commander)
-- може завантажувати файли в фон╕
+- в╕добража╓ таблиц╕ та (незабаром) фрейми,
+- показу╓ кольори як вказано в HTML стор╕нц╕,
+- використову╓ випадаюч╕ меню (як в Midnight Commander),
+- може завантажувати файли в фон╕.
 
 %prep
 %setup -q
@@ -90,13 +90,14 @@ aclocal
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_applnkdir}/Network/WWW,%{_pixmapsdir},%{_mandir}/pl/man1}
+install -d $RPM_BUILD_ROOT{%{_applnkdir}/Network/WWW,%{_pixmapsdir}} \
+	$RPM_BUILD_ROOT%{_mandir}/pl/man1
 
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
 
 install %{SOURCE1} $RPM_BUILD_ROOT%{_applnkdir}/Network/WWW
 install %{SOURCE2} $RPM_BUILD_ROOT%{_mandir}/pl/man1/links.1
-install %{SOURCE3} $RPM_BUILD_ROOT%{_pixmapsdir} 
+install %{SOURCE3} $RPM_BUILD_ROOT%{_pixmapsdir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -108,4 +109,4 @@ rm -rf $RPM_BUILD_ROOT
 %{_applnkdir}/Network/WWW/*
 %{_mandir}/man*/*
 %lang(pl) %{_mandir}/pl/man*/*
-%{_pixmapsdir}/links.png
+%{_pixmapsdir}/*
