@@ -1,0 +1,15 @@
+diff -urN aaa/links-current/configure.in links-current/configure.in
+--- aaa/links-current/configure.in	Thu May 16 08:06:43 2002
++++ links-current/configure.in	Thu May 23 00:00:43 2002
+@@ -7,11 +7,6 @@
+ 
+ AM_INIT_AUTOMAKE(links, current)
+ 
+-ACLOCAL="$missing_dir/missing aclocal"
+-AUTOCONF="$missing_dir/missing autoconf"
+-AUTOMAKE="$missing_dir/missing automake"
+-AUTOHEADER="$missing_dir/missing autoheader"
+-
+ AM_CONFIG_HEADER(config.h)
+ 
+ dnl Checks for programs.
