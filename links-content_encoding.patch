@@ -180,87 +180,84 @@
 +}
 +             
 --- links-0.97/http.c	Tue Mar 26 22:49:22 2002
-+++ links-0.97.newer/http.c	Wed Jul  3 19:28:07 2002
++++ links-0.97/http.c.new	Thu Jul  4 20:02:21 2002
 @@ -262,6 +262,7 @@
  	}
  	add_to_str(&hdr, &l, ")\r\n");
  	add_to_str(&hdr, &l, "Accept: */*\r\n");
-+   add_to_str(&hdr, &l, "Accept-Encoding: gzip\r\n");
++	add_to_str(&hdr, &l, "Accept-Encoding: gzip\r\n");
  	if (!(accept_charset)) {
  		int i;
  		unsigned char *cs, *ac;
-@@ -359,9 +360,25 @@
+@@ -359,9 +360,24 @@
  		int l = rb->len;
  		if (info->length >= 0 && info->length < l) l = info->length;
  		c->received += l;
 -		if (add_fragment(c->cache, c->from, rb->data, l) == 1) c->tries = 0;
-+//		if (add_fragment(c->cache, c->from, rb->data, l) == 1) c->tries = 0;
-+      if (l) {
-+         if (c->gzip) {
-+            int dl;
-+            unsigned char *data = decompress_gzip(&c->z, rb->data, l, &dl);
-+            if (!data) {
-+               setcstate(c, S_OUT_OF_MEM);
-+               abort_connection(c);
-+               return;
-+            }
-+            if (add_fragment(c->cache, c->from, data, dl) == 1) c->tries = 0;
-+            mem_free(data);
-+            c->from += dl;
-+         }
-+         if (add_fragment(c->cache, c->from, rb->data, l) == 1) c->tries = 0;
-+         c->from += l;
-+      }       
++		if (l) {
++			if (c->gzip) {
++				int dl;
++				unsigned char *data = decompress_gzip(&c->z, rb->data, l, &dl);
++				if (!data) {
++					setcstate(c, S_OUT_OF_MEM);
++					abort_connection(c);
++					return;
++				}
++				if (add_fragment(c->cache, c->from, data, dl) == 1) c->tries = 0;
++				mem_free(data);
++				c->from += dl;
++			} else {
++				if (add_fragment(c->cache, c->from, rb->data, l) == 1) c->tries = 0;
++				c->from += l;
++			}
++		}       
  		if (info->length >= 0) info->length -= l;
 -		c->from += l;
-+//		c->from += l;
  		kill_buffer_data(rb, l);
  		if (!info->length && !rb->close) {
  			setcstate(c, S_OK);
-@@ -405,9 +422,25 @@
+@@ -405,9 +421,23 @@
  			int l = info->chunk_remaining;
  			if (l > rb->len) l = rb->len;
  			c->received += l;
 -			if (add_fragment(c->cache, c->from, rb->data, l) == 1) c->tries = 0;
-+//			if (add_fragment(c->cache, c->from, rb->data, l) == 1) c->tries = 0;
  			info->chunk_remaining -= l;
 -			c->from += l;
-+//			c->from += l;
-+         if (c->gzip) {
-+            int dl;
-+            unsigned char *data = decompress_gzip(&c->z, rb->data, l, &dl);
-+            if (!data) {
-+               setcstate(c, S_OUT_OF_MEM);
-+               abort_connection(c);
-+               return;
-+            }
-+            if (add_fragment(c->cache, c->from, data, dl) == 1) c->tries = 0;
-+            mem_free(data);
-+            c->from += dl;
-+         } else {
-+            if (add_fragment(c->cache, c->from, rb->data, l) == 1) c->tries = 0;
-+            c->from += l;
-+         }
-+            
++			if (c->gzip) {
++				int dl;
++				unsigned char *data = decompress_gzip(&c->z, rb->data, l, &dl);
++				if (!data) {
++					setcstate(c, S_OUT_OF_MEM);
++					abort_connection(c);
++					return;
++				}
++				if (add_fragment(c->cache, c->from, data, dl) == 1) c->tries = 0;
++				mem_free(data);
++				c->from += dl;
++			} else {
++				if (add_fragment(c->cache, c->from, rb->data, l) == 1) c->tries = 0;
++				c->from += l;
++			}
++		
  			kill_buffer_data(rb, l);
  			if (!info->chunk_remaining && rb->len >= 1) {
  				if (rb->data[0] == 10) kill_buffer_data(rb, 1);
-@@ -635,6 +668,18 @@
+@@ -635,6 +665,18 @@
  	if (!e->last_modified && (d = parse_http_header(e->head, "Date", NULL)))
  		e->last_modified = d;
  	if (info->length == -1 || (version < 11 && info->close)) rb->close = 1;
-+   d = parse_http_header(e->head, "Content-Encoding", NULL);
-+   c->gzip = 0;
-+   if (d) {
-+      if (!strcasecmp(d, "gzip") || !strcasecmp(d, "x-gzip")) {
-+         mem_free(d);
-+         d = parse_http_header(e->head, "Content-Type", NULL);
-+         if (d) {
-+            if (!strncasecmp(d, "text", 4)) c->gzip = 1;
-+            mem_free(d);
-+         }
-+      }
-+   } 
++	d = parse_http_header(e->head, "Content-Encoding", NULL);
++	c->gzip = 0;
++	if (d) {
++		if (!strcasecmp(d, "gzip") || !strcasecmp(d, "x-gzip")) {
++			mem_free(d);
++			d = parse_http_header(e->head, "Content-Type", NULL);
++			if (d) {
++				if (!strncasecmp(d, "text", 4)) c->gzip = 1;
++				mem_free(d);
++			}
++		}
++	} 
  	read_http_data(c, rb);
  }
  
