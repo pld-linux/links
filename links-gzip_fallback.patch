@@ -10,8 +10,8 @@
  AC_CHECK_LIB(dl, dlopen)
  #ifdef HAVE_SSL
  AC_ARG_WITH(ssl, [  --without-ssl           disable SSL support], [if test "$withval" = no; then disable_ssl=yes; fi])
---- links-1.00pre11/file.c.orig	2004-06-29 03:33:49.000000000 +0200
-+++ links-1.00pre11/file.c	2004-10-25 18:39:07.709892504 +0200
+--- links-1.00pre12/file.c.orig	2004-10-22 16:01:41.000000000 +0200
++++ links-1.00pre12/file.c	2004-11-06 00:03:46.313650064 +0100
 @@ -221,9 +221,14 @@
  		mem_free(name);
  		setcstate(c, S_FILE_TYPE); abort_connection(c); return;
@@ -27,14 +27,19 @@
  		mem_free(name);
  		setcstate(c, -er); abort_connection(c); return;
  	}
-@@ -348,8 +353,41 @@
+@@ -347,14 +352,45 @@
  		add_to_str(&file, &fl, "</pre></body></html>\n");
  		head = stracpy("\r\nContent-Type: text/html\r\n");
  	} else {
-+		if ((int)stt.st_size != stt.st_size || (int)stt.st_size < 0) {
+-		mem_free(name);
+ 		/* + !stt.st_size is there because of bug in Linux. Read returns
+ 		   -EACCES when reading 0 bytes to invalid address */
+ 		if (stt.st_size > MAXINT) {
 +			mem_free(name);
-+			goto nm;
-+		}
+ 			close(h);
+ 			setcstate(c, S_OUT_OF_MEM); abort_connection(c);
+ 			return;
+ 		}
 +#ifdef HAVE_ZLIB_H
 +		if (strncmp(name + strlen(name) - 3, ".gz", 3) == 0) {
 +		/* decompression */
@@ -65,12 +70,11 @@
 +		else 
 +#endif
 +		{
- 		mem_free(name);
--		if ((int)stt.st_size != stt.st_size || (int)stt.st_size < 0) goto nm;
- 		/* + !stt.st_size is there because of bug in Linux. Read returns
- 		   -EACCES when reading 0 bytes to invalid address */
- 		if (!(file = mem_alloc(stt.st_size + !stt.st_size))) {
-@@ -365,6 +403,7 @@
++  		mem_free(name);
+ 		file = mem_alloc(stt.st_size + !stt.st_size);
+ 		if ((r = read(h, file, stt.st_size)) != stt.st_size) {
+ 			mem_free(file); close(h);
+@@ -364,6 +400,7 @@
  		close(h);
  		fl = stt.st_size;
  		head = stracpy("");
