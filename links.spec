@@ -12,7 +12,7 @@ URL:		http://artax.karlin.mff.cuni.cz/~mikulas/links/
 BuildRequires:	gpm-devel
 BuildRequires:	ncurses-devel => 5.0
 Provides:	webclient
-BuildRoot:	/tmp/%{name}-%{version}-root
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
 Links is a text based WWW browser, at first look similiar to Lynx, but
