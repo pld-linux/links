@@ -23,8 +23,8 @@ somehow different:
 - can download files in background
 
 %description -l pl
-Links jest tekstow± przegl±dark± WWW, na pierwszy rzut oka podobn± do Lynxa,
-ale mimo wszystko inn±:
+Links jest tekstow± przegl±dark± WWW, na pierwszy rzut oka podobn± do
+Lynxa, ale mimo wszystko inn±:
 
 - renderuje tabelki i ramki
 - wy¶wietla kolory zgodnie z definicjami w ogl±danej stronie HTML
