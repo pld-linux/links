@@ -6,7 +6,7 @@ Summary(ru):	Текстовый WWW броузер типа Lynx
 Summary(uk):	Текстовий WWW броузер типу Lynx
 Name:		links
 Version:	0.98
-Release:	2
+Release:	3
 Epoch:		1
 License:	GPL v2
 Group:		Applications/Networking
@@ -19,6 +19,7 @@ Patch0:		http://www.misiek.eu.org/ipv6/%{name}-0.92-ipv6-20000921.patch.gz
 Patch1:		%{name}-dump_codepage.patch
 Patch2:		%{name}-gzip_fallback.patch
 Patch3:		%{name}-content_encoding.patch
+Patch4:		%{name}-home_etc.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	gpm-devel
@@ -79,6 +80,7 @@ Links - це текстовий WWW броузер, на перший погляд схожий на Lynx, але
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %build
 rm -f missing
