@@ -76,7 +76,7 @@ Links - це текстовий WWW броузер, на перший погляд схожий на Lynx, але
 %patch0 -p1
 
 %build
-rm -f mssing
+rm -f missing
 aclocal
 %{__autoconf}
 %{__automake}
@@ -93,7 +93,6 @@ install -d $RPM_BUILD_ROOT{%{_applnkdir}/Network/WWW,%{_pixmapsdir},%{_mandir}/p
 install %{SOURCE1} $RPM_BUILD_ROOT%{_applnkdir}/Network/WWW
 install %{SOURCE2} $RPM_BUILD_ROOT%{_mandir}/pl/man1/links.1
 install %{SOURCE3} $RPM_BUILD_ROOT%{_pixmapsdir}
-
 
 %clean
 rm -rf $RPM_BUILD_ROOT
