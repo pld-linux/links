@@ -1,7 +1,9 @@
 [Desktop Entry]
-Name=links
+Name=Links
 Comment=Links is a text-only browser very similar to lynx
 Comment[es]=El links es un browser para modo texto, similar a lynx
+Comment[pl]=Links jest tekstową przeglądarką podobną do lynksa
+Comment[pt]=O links é um browser para modo texto, similar ao lynx
 Comment[pt_BR]=O links é um browser para modo texto, similar ao lynx
 Exec=links
 Terminal=1
