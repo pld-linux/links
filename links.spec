@@ -46,7 +46,7 @@ Lynxa, ale mimo wszystko inn±:
 
 %install
 rm -rf $RPM_BUILD_ROOT
-insall -d $RPM_BUILD_ROOT%{_applnkdir}/Networl/WWW
+install -d $RPM_BUILD_ROOT%{_applnkdir}/Networl/WWW
 
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
 
