@@ -12,6 +12,8 @@ Source0:	http://artax.karlin.mff.cuni.cz/~mikulas/links/download/%{name}-%{versi
 Source1:	%{name}.desktop
 Patch0:		http://www.misiek.eu.org/ipv6/%{name}-0.92-ipv6-20000921.patch.gz
 URL:		http://artax.karlin.mff.cuni.cz/~mikulas/links/
+BuildRequires:	autoconf
+BuildRequires:	automake
 BuildRequires:	gpm-devel
 BuildRequires:	ncurses-devel => 5.1
 BuildRequires:	openssl-devel >= 0.9.6a
@@ -41,6 +43,9 @@ Lynxa, ale mimo wszystko inn±:
 #%patch0 -p1
 
 %build
+aclocal
+autoconf
+automake -a -c
 %configure
 %{__make}
 
