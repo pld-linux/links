@@ -10,5 +10,5 @@ Exec=links
 Terminal=true
 Icon=links.png
 Type=Application
-Categories=Network;WebBrowser;X-WWW;
+Categories=ConsoleOnly;Network;WebBrowser;
 # vi: encoding=utf-8
