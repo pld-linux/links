@@ -50,17 +50,17 @@ automake -a -c
 %{__make}
 
 %install
-%{__rm} -rf $RPM_BUILD_ROOT
-%{__install} -d $RPM_BUILD_ROOT%{_applnkdir}/Network/WWW
+rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT%{_applnkdir}/Network/WWW
 
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
 
-%{__install} %{SOURCE1} $RPM_BUILD_ROOT%{_applnkdir}/Network/WWW
+install %{SOURCE1} $RPM_BUILD_ROOT%{_applnkdir}/Network/WWW
 
-%{__gzip} -9nf AUTHORS BUGS ChangeLog README SITES TODO
+gzip -9nf AUTHORS BUGS ChangeLog README SITES TODO
 
 %clean
-%{__rm} -rf $RPM_BUILD_ROOT
+rm -rf $RPM_BUILD_ROOT
 
 %files 
 %defattr(644,root,root,755)
