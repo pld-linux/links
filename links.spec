@@ -2,7 +2,7 @@ Summary:	Lynx-like text WWW browser
 Summary(pl):	Podobna do Lynxa tekstowa przegl±darka WWW
 Name:		links
 Version:	0.95
-Release:	3
+Release:	4
 Epoch:		1
 License:	GPL
 Group:		Applications/Networking
@@ -46,11 +46,11 @@ Lynxa, ale mimo wszystko inn±:
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_applnkdir}/Network/WWW
+install -d $RPM_BUILD_ROOT%{_applnkdir}/Networking/WWW
 
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
 
-install %{SOURCE1} $RPM_BUILD_ROOT%{_applnkdir}/Network/WWW
+install %{SOURCE1} $RPM_BUILD_ROOT%{_applnkdir}/Networking/WWW
 
 gzip -9nf AUTHORS BUGS ChangeLog README SITES TODO
 
@@ -61,5 +61,5 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc *.gz
 %attr(755,root,root) %{_bindir}/*
-%{_applnkdir}/Network/WWW/*
+%{_applnkdir}/Networking/WWW/*
 %{_mandir}/man*/*
