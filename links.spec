@@ -1,12 +1,12 @@
 Summary:	Lynx-like text WWW browser
 Summary(pl):	Podobna do Lynxa tekstowa przegl±darka WWW
 Name:		links
-Version:	23.05.2000
+Version:	0.90pre2
 Release:	1
 License:	GPL
 Group:		Applications/Networking
 Group(pl):	Aplikacje/Sieciowe
-Source0:	%{name}-%{version}.tar.gz
+Source0:	http://artax.karlin.mff.cuni.cz/~mikulas/links/download/%{name}-%{version}.tar.gz
 URL:		http://artax.karlin.mff.cuni.cz/~mikulas/links/
 BuildRequires:	gpm-devel
 BuildRequires:	ncurses-devel => 5.0
@@ -32,8 +32,7 @@ ale mimo wszystko inn±:
 - mo¿e ¶ci±gaæ pliki w tle
 
 %prep
-# temporary -n, to work with links-current snapshots
-%setup  -q -n %{name}-current
+%setup  -q
 
 %build
 LDFLAGS="-s"; export LDFLAGS
