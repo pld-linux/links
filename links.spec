@@ -1,7 +1,7 @@
 Summary:	Lynx-like text WWW browser
-Summary(es):	El links es un browser para modo texto, similar a lynx.
+Summary(es):	El links es un browser para modo texto, similar a lynx
 Summary(pl):	Podobna do Lynksa tekstowa przegl╠darka WWW
-Summary(pt_BR):	O links И um browser para modo texto, similar ao lynx.
+Summary(pt_BR):	O links И um browser para modo texto, similar ao lynx
 Summary(ru):	Текстовый WWW броузер типа Lynx
 Summary(uk):	Текстовий WWW броузер типу Lynx
 Name:		links
@@ -60,7 +60,7 @@ Links - это текстовый WWW броузер, на первый взгляд похожий на Lynx,
 - отображает таблицы и (скоро) фреймы
 - показывает цвета как указано в HTML странице
 - использует выпадающие меню (как в Midnight Commander)
-- может загружать файлы в фоне
+- может загружать файлы в фоне.
 
 %description -l uk
 Links - це текстовий WWW броузер, на перший погляд схожий на Lynx, але
@@ -69,7 +69,7 @@ Links - це текстовий WWW броузер, на перший погляд схожий на Lynx, але
 - в╕добража╓ таблиц╕ та (незабаром) фрейми
 - показу╓ кольори як вказано в HTML стор╕нц╕
 - використову╓ випадаюч╕ меню (як в Midnight Commander)
-- може завантажувати файли в фон╕
+- може завантажувати файли в фон╕.
 
 %prep
 %setup -q
@@ -85,10 +85,10 @@ aclocal
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_applnkdir}/Network/WWW,%{_pixmapsdir},%{_mandir}/pl/man1}
+install -d $RPM_BUILD_ROOT{%{_applnkdir}/Network/WWW,%{_pixmapsdir}} \
+	$RPM_BUILD_ROOT%{_mandir}/pl/man1
 
-%{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT
+%{__make} install DESTDIR=$RPM_BUILD_ROOT
 
 install %{SOURCE1} $RPM_BUILD_ROOT%{_applnkdir}/Network/WWW
 install %{SOURCE2} $RPM_BUILD_ROOT%{_mandir}/pl/man1/links.1
@@ -104,4 +104,4 @@ rm -rf $RPM_BUILD_ROOT
 %{_applnkdir}/Network/WWW/*
 %{_mandir}/man*/*
 %lang(pl) %{_mandir}/pl/man*/*
-%{_pixmapsdir}/links.png
+%{_pixmapsdir}/*
