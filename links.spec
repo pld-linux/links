@@ -1,3 +1,4 @@
+# I dont know what release it should have
 Summary:	Lynx-like text WWW browser
 Summary(es):	El links es un browser para modo texto, similar a lynx.
 Summary(pl):	Podobna do Lynksa tekstowa przegl╠darka WWW
@@ -10,19 +11,22 @@ Release:	1
 Epoch:		1
 License:	GPL v2
 Group:		Applications/Networking
-Source0:	http://artax.karlin.mff.cuni.cz/~mikulas/links/download/%{name}-%{version}.tar.gz
+Source0:	http://atrey.karlin.mff.cuni.cz/%7Eclock/twibright/%{name}/download/%{name}-current.tar.bz2
 Source1:	%{name}.desktop
 Source2:	%{name}.1.pl
 Source3:	%{name}.png
-Patch0:		http://www.misiek.eu.org/ipv6/%{name}-0.92-ipv6-20000921.patch.gz
-Patch1:		%{name}-dump_codepage.patch
-URL:		http://artax.karlin.mff.cuni.cz/~mikulas/links/
+URL:		http://atrey.karlin.mff.cuni.cz/%7Eclock/twibright/links
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	gpm-devel
 BuildRequires:	ncurses-devel => 5.1
 BuildRequires:	openssl-devel >= 0.9.6a
 BuildRequires:	zlib-devel
+BuildRequires:  libpng-devel
+BuildRequires:  libjpeg-devel
+BuildRequires:  libtiff-devel
+BuildRequires:  svgalib-devel
+BuildRequires:  XFree86-devel
 Provides:	webclient
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -73,15 +77,19 @@ Links - це текстовий WWW броузер, на перший погляд схожий на Lynx, але
 - може завантажувати файли в фон╕
 
 %prep
-%setup -q
-%patch1 -p1
+%setup -q -n %{name}-current
 
 %build
-rm -f mssing
-aclocal
-autoconf
-automake -a -c -f
-%configure
+#rm -f mssing
+#aclocal
+#autoconf
+#automake -a -c -f
+if [ -f %{_pkgconfigdir}/libpng12.pc ] ; then
+    CPPFLAGS="`pkg-config libpng12 --cflags`"
+fi
+%configure2_13 CPPFLAGS="$CPPFLAGS" \
+    --enable-graphics \
+    --enable-javascript
 %{__make}
 
 %install
@@ -93,7 +101,7 @@ install -d $RPM_BUILD_ROOT{%{_applnkdir}/Network/WWW,%{_pixmapsdir},%{_mandir}/p
 install %{SOURCE1} $RPM_BUILD_ROOT%{_applnkdir}/Network/WWW
 install %{SOURCE2} $RPM_BUILD_ROOT%{_mandir}/pl/man1/links.1
 install %{SOURCE3} $RPM_BUILD_ROOT%{_pixmapsdir}
-gzip -9nf AUTHORS BUGS ChangeLog README SITES TODO
+gzip -9nf AUTHORS BUGS ChangeLog README SITES TODO NEWS
 
 %clean
 rm -rf $RPM_BUILD_ROOT
