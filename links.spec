@@ -45,17 +45,17 @@ Lynxa, ale mimo wszystko inn±:
 %{__make}
 
 %install
-rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_applnkdir}/Network/WWW
+%{__rm} -rf $RPM_BUILD_ROOT
+%{__install} -d $RPM_BUILD_ROOT%{_applnkdir}/Network/WWW
 
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
 
-install %{SOURCE1} $RPM_BUILD_ROOT%{_applnkdir}/Network/WWW
+%{__install} %{SOURCE1} $RPM_BUILD_ROOT%{_applnkdir}/Network/WWW
 
-gzip -9nf AUTHORS BUGS ChangeLog README SITES TODO
+%{__gzip} -9nf AUTHORS BUGS ChangeLog README SITES TODO
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+%{__rm} -rf $RPM_BUILD_ROOT
 
 %files 
 %defattr(644,root,root,755)
