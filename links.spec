@@ -6,8 +6,6 @@ Release:	2
 Epoch:		1
 License:	GPL
 Group:		Applications/Networking
-Group(de):	Applikationen/Netzwerkwesen
-Group(pl):	Aplikacje/Sieciowe
 Source0:	http://artax.karlin.mff.cuni.cz/~mikulas/links/download/%{name}-%{version}.tar.gz
 Source1:	%{name}.desktop
 Source2:	%{name}.1.pl
