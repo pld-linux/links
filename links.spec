@@ -1,7 +1,7 @@
 Summary:	Lynx-like text WWW browser
-Summary(es):	El links es un browser para modo texto, similar a lynx.
+Summary(es):	El links es un browser para modo texto, similar a lynx
 Summary(pl):	Podobna do Lynksa tekstowa przegl╠darka WWW
-Summary(pt_BR):	O links И um browser para modo texto, similar ao lynx.
+Summary(pt_BR):	O links И um browser para modo texto, similar ao lynx
 Summary(ru):	Текстовый WWW броузер типа Lynx
 Summary(uk):	Текстовий WWW броузер типу Lynx
 Name:		links
@@ -81,10 +81,10 @@ Links - це текстовий WWW броузер, на перший погляд схожий на Lynx, але
 %patch3 -p1
 
 %build
-rm -f mssing
+rm -f missing
 aclocal
-autoconf
-automake -a -c -f
+%{__autoconf}
+%{__automake}
 %configure
 %{__make}
 
