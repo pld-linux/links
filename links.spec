@@ -1,7 +1,7 @@
 Summary:	Lynx-like text WWW browser
 Summary(pl):	Podobna do Lynxa tekstowa przegl±darka WWW
 Name:		links
-Version:	0.90pre2
+Version:	0.91
 Release:	1
 Serial:		1
 License:	GPL
