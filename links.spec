@@ -1,8 +1,8 @@
 Summary:	Lynx-like text WWW browser
 Summary(pl):	Podobna do Lynksa tekstowa przegl±darka WWW
 Name:		links
-Version:	0.96
-Release:	6
+Version:	0.97
+Release:	1
 Epoch:		1
 License:	GPL
 Group:		Applications/Networking
@@ -18,6 +18,7 @@ BuildRequires:	automake
 BuildRequires:	gpm-devel
 BuildRequires:	ncurses-devel => 5.1
 BuildRequires:	openssl-devel >= 0.9.6a
+BuildRequires:	zlib-devel
 Provides:	webclient
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
