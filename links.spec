@@ -80,7 +80,7 @@ Links - це текстовий WWW броузер, на перший погляд схожий на Lynx, але
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1
+#%patch4 -p1
 
 %build
 rm -f missing
