@@ -2,14 +2,14 @@ Summary:	Lynx-like text WWW browser
 Summary(pl):	Podobna do Lynksa tekstowa przegl±darka WWW
 Name:		links
 Version:	0.96
-Release:	4
+Release:	5
 Epoch:		1
 License:	GPL
 Group:		Applications/Networking
 Source0:	http://artax.karlin.mff.cuni.cz/~mikulas/links/download/%{name}-%{version}.tar.gz
 Source1:	%{name}.desktop
 Source2:	%{name}.1.pl
-Source3:	http.png
+Source3:	links.png
 Patch0:		http://www.misiek.eu.org/ipv6/%{name}-0.92-ipv6-20000921.patch.gz
 URL:		http://artax.karlin.mff.cuni.cz/~mikulas/links/
 BuildRequires:	autoconf
@@ -70,4 +70,4 @@ rm -rf $RPM_BUILD_ROOT
 %{_applnkdir}/Network/WWW/*
 %{_mandir}/man*/*
 %lang(pl) %{_mandir}/pl/man*/*
-%{_pixmapsdir}/http.png
+%{_pixmapsdir}/links.png
