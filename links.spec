@@ -6,7 +6,7 @@ Summary(ru):	Текстовый WWW броузер типа Lynx
 Summary(uk):	Текстовий WWW броузер типу Lynx
 Name:		links
 Version:	0.99pre12
-Release:	1
+Release:	2
 Epoch:		1
 License:	GPL v2
 Group:		Applications/Networking
@@ -96,12 +96,12 @@ rm -f missing
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_applnkdir}/Network/WWW,%{_pixmapsdir}} \
+install -d $RPM_BUILD_ROOT{%{_desktopdir},%{_pixmapsdir}} \
 	$RPM_BUILD_ROOT%{_mandir}/pl/man1
 
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
 
-install %{SOURCE1} $RPM_BUILD_ROOT%{_applnkdir}/Network/WWW
+install %{SOURCE1} $RPM_BUILD_ROOT%{_desktopdir}
 install %{SOURCE2} $RPM_BUILD_ROOT%{_mandir}/pl/man1/links.1
 install %{SOURCE3} $RPM_BUILD_ROOT%{_pixmapsdir}
 
@@ -112,7 +112,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc AUTHORS BUGS ChangeLog NEWS README SITES TODO
 %attr(755,root,root) %{_bindir}/*
-%{_applnkdir}/Network/WWW/*
+%{_desktopdir}/*
 %{_mandir}/man*/*
 %lang(pl) %{_mandir}/pl/man*/*
 %{_pixmapsdir}/*
