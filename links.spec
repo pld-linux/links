@@ -40,9 +40,9 @@ Lynksa, ale mimo wszystko inn±:
 
 %prep
 %setup -q
-#%patch0 -p1
 
 %build
+rm -f mssing
 aclocal
 autoconf
 automake -a -c
