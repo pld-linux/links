@@ -78,8 +78,8 @@ Links - це текстовий WWW броузер, на перший погляд схожий на Lynx, але
 %build
 rm -f mssing
 aclocal
-autoconf
-automake -a -c -f
+%{__autoconf}
+%{__automake}
 %configure
 %{__make}
 
