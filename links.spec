@@ -5,21 +5,24 @@ Summary(pt_BR):	O links И um browser para modo texto, similar ao lynx
 Summary(ru):	Текстовый WWW броузер типа Lynx
 Summary(uk):	Текстовий WWW броузер типу Lynx
 Name:		links
-Version:	0.97
+Version:	2.0pre5
 Release:	1
 Epoch:		1
 License:	GPL v2
 Group:		Applications/Networking
-Source0:	http://artax.karlin.mff.cuni.cz/~mikulas/links/download/%{name}-%{version}.tar.gz
+Source0:	ftp://atrey.karlin.mff.cuni.cz/pub/local/clock/links/%{name}-%{version}.tar.bz2
 Source1:	%{name}.desktop
 Source2:	%{name}.1.pl
 Source3:	%{name}.png
-Patch0:		%{name}-dump_codepage.patch
-URL:		http://artax.karlin.mff.cuni.cz/~mikulas/links/
+URL:		http://atrey.karlin.mff.cuni.cz/~clock/twibright/links/
+BuildRequires:	XFree86-devel
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	gpm-devel
-BuildRequires:	ncurses-devel => 5.1
+BuildRequires:	libjpeg-devel
+BuildRequires:	libpng-devel
+BuildRequires:	libtiff-devel
+BuildRequires:	ncurses-devel >= 5.1
 BuildRequires:	openssl-devel >= 0.9.6a
 BuildRequires:	zlib-devel
 Provides:	webclient
@@ -73,14 +76,45 @@ Links - це текстовий WWW броузер, на перший погляд схожий на Lynx, але
 
 %prep
 %setup -q
-%patch0 -p1
 
 %build
 rm -f missing
 aclocal
 %{__autoconf}
+#autoheader
 %{__automake}
-%configure
+%configure \
+	--enable-javascript \
+	--enable-graphics \
+	--with-ssl \
+	--with-libjpeg \
+	--with-libtiff \
+	--without-svgalib \
+	--without-fb \
+	--without-pmshell \
+	--without-atheos \
+	--with-x
+
+patch -p0 <<END
+--- Makefile.orig	Wed May 29 21:50:45 2002
++++ Makefile	Wed May 29 21:51:07 2002
+@@ -41,10 +41,10 @@
+ pkgincludedir = \$(includedir)/links
+ top_builddir = .
+ 
+-ACLOCAL = /missing aclocal
+-AUTOCONF = /missing autoconf
+-AUTOMAKE = /missing automake
+-AUTOHEADER = /missing autoheader
++ACLOCAL = ./missing aclocal
++AUTOCONF = ./missing autoconf
++AUTOMAKE = ./missing automake
++AUTOHEADER = ./missing autoheader
+ 
+ INSTALL = /usr/bin/install -c
+ INSTALL_PROGRAM = \${INSTALL}
+END
+
 %{__make}
 
 %install
