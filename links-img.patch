@@ -1,0 +1,23 @@
+diff -urN aaa/links-current/html.c links-current/html.c
+--- aaa/links-current/html.c	Thu May 16 08:07:41 2002
++++ links-current/html.c	Tue May 28 16:54:51 2002
+@@ -828,7 +828,18 @@
+ 			if (!d_opt->images && !format.link) goto ret;
+ 			if (usemap) al = stracpy("[USEMAP]");
+ 			else if (ismap) al = stracpy("[ISMAP]");
+-			else al = stracpy("[IMG]");
++			else{
++				unsigned char *s = get_attr_val(a, "src");
++				int r;
++				if( s ){
++					for( r = strlen(s)-1; r >= 0; --r )
++						if( dir_sep( s[r] ) )
++							break;
++					al = stracpy( s + ++r );
++					mem_free( s );
++				}
++				else al = stracpy("[IMG]");
++			}
+ 		}
+ 		if (al) {
+ 			if (ismap) {
