@@ -20,7 +20,7 @@ Release:	1
 Epoch:		1
 License:	GPL v2
 Group:		Applications/Networking
-Source0:	http://atrey.karlin.mff.cuni.cz/~clock/twibright/%{name}/download/%{name}-%{version}.tar.bz2
+Source0:	ftp://atrey.karlin.mff.cuni.cz/pub/local/clock/links/%{name}-%{version}.tar.bz2
 Source1:	%{name}.desktop
 Source2:	%{name}.1.pl
 Source3:	%{name}.png
@@ -30,7 +30,7 @@ Patch1:		%{name}-ac.patch
 Patch2:		%{name}-ac25x.patch
 Patch3:		%{name}-current-reallyquit.patch
 Patch4:		%{name}-img.patch
-URL:		http://atrey.karlin.mff.cuni.cz/~clock/twibright/links
+URL:		http://atrey.karlin.mff.cuni.cz/~clock/twibright/links/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	gpm-devel
