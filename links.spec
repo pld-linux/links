@@ -45,7 +45,7 @@ Lynksa, ale mimo wszystko inn±:
 rm -f mssing
 aclocal
 autoconf
-automake -a -c
+automake -a -c -f
 %configure
 %{__make}
 
