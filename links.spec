@@ -8,8 +8,6 @@
 # _without_pmshell - compile without PMShell graphics driver
 # _without_atheos - compile without Atheos graphics driver
 
-%define _snap 20020516
-
 Summary:	Lynx-like WWW browser
 Summary(es):	El links es un browser para modo texto, similar a lynx.
 Summary(pl):	Podobna do Lynksa przegl╠darka WWW
@@ -17,8 +15,8 @@ Summary(pt_BR):	O links И um browser para modo texto, similar ao lynx.
 Summary(ru):	Текстовый WWW броузер типа Lynx
 Summary(uk):	Текстовий WWW броузер типу Lynx
 Name:		links
-Version:	current
-Release:	%{_snap}.4
+Version:	2.0pre4
+Release:	1
 Epoch:		1
 License:	GPL v2
 Group:		Applications/Networking
