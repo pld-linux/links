@@ -2,7 +2,8 @@
 Name=links
 Comment=Links is a text-only browser very similar to lynx
 Comment[es]=El links es un browser para modo texto, similar a lynx
-Comment[pt_BR]=O links é um browser para modo texto, similar ao lynx
+Comment[pt_BR]=O links Ã© um browser para modo texto, similar ao lynx
 Exec=links
 Terminal=1
 Type=Application
+# vi: encoding=utf-8
