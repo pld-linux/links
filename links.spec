@@ -85,9 +85,9 @@ Links - це текстовий WWW броузер, на перший погляд схожий на Lynx, але
 #autoconf
 #automake -a -c -f
 if [ -f %{_pkgconfigdir}/libpng12.pc ] ; then
-    CPPFLAGS="`pkg-config libpng12 --cflags`"
+    CPPFLAGS="`pkg-config libpng12 --cflags`"; export CPPFLAGS
 fi
-%configure2_13 CPPFLAGS="$CPPFLAGS" \
+%configure2_13 \
     --enable-graphics \
     --enable-javascript
 %{__make}
