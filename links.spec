@@ -1,7 +1,7 @@
 Summary:	Lynx-like text WWW browser
 Summary(pl):	Podobna do Lynxa tekstowa przegl±darka WWW
 Name:		links
-Version:	0.94pre9
+Version:	0.95
 Release:	1
 Epoch:		1
 License:	GPL
@@ -9,7 +9,7 @@ Group:		Applications/Networking
 Group(de):	Applikationen/Netzwerkwesen
 Group(pl):	Aplikacje/Sieciowe
 Source0:	http://artax.karlin.mff.cuni.cz/~mikulas/links/download/%{name}-%{version}.tar.gz
-Patch0:		http://www.misiek.eu.org/ipv6/links-0.92-ipv6-20000921.patch.gz
+Patch0:		http://www.misiek.eu.org/ipv6/%{name}-0.92-ipv6-20000921.patch.gz
 URL:		http://artax.karlin.mff.cuni.cz/~mikulas/links/
 BuildRequires:	gpm-devel
 BuildRequires:	ncurses-devel => 5.1
@@ -48,11 +48,13 @@ rm -rf $RPM_BUILD_ROOT
 
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
 
+gzip -9nf AUTHORS BUGS ChangeLog README SITES TODO
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files 
 %defattr(644,root,root,755)
-%doc AUTHORS BUGS ChangeLog README SITES TODO
+%doc *.gz
 %attr(755,root,root) %{_bindir}/*
 %{_mandir}/man*/*
