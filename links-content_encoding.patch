@@ -263,14 +263,7 @@
  
 --- links-0.97/links.h	Wed Jul  3 19:31:24 2002
 +++ links-0.97.newer/links.h	Wed Jul  3 18:59:03 2002
-@@ -92,13 +92,14 @@
- #endif
- 
- #include <termios.h>
--
- #ifdef HAVE_SSL
- #include <openssl/ssl.h>
- #endif
+@@ -99,6 +99,8 @@
  
  #ifdef HAVE_ZLIB_H
  #include <zlib.h>
