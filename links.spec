@@ -2,7 +2,7 @@ Summary:	Lynx-like text WWW browser
 Summary(pl):	Podobna do Lynxa tekstowa przegl±darka WWW
 Name:		links
 Version:	0.92
-Release:	3
+Release:	4
 Serial:		1
 License:	GPL
 Group:		Applications/Networking
@@ -44,7 +44,8 @@ LDFLAGS="-s"; export LDFLAGS
 rm -rf $RPM_BUILD_ROOT
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
 
-gzip -9nf AUTHORS BUGS ChangeLog README SITES TODO 
+gzip -9nf AUTHORS BUGS ChangeLog README SITES TODO \
+	$RPM_BUILD_ROOT%{_mandir}/man*/*
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -53,3 +54,4 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc *.gz
 %attr(755,root,root) %{_bindir}/*
+%{_mandir}/man*/*
