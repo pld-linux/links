@@ -1,0 +1,11 @@
+--- links-1.00pre12/intl/polish.lng.orig	2004-10-26 00:26:38.000000000 +0200
++++ links-1.00pre12/intl/polish.lng	2005-01-14 19:00:47.808993320 +0100
+@@ -14,7 +14,7 @@
+ T_KEYS, "Klawiszologia",
+ T_KEYS_DESC, "ESC       poka¿ menu\n^C, q     wyj¶cie\n^P, ^N    przewiñ góra,dó³\n[, ]      przewiñ lewo,prawo\ngóra, dó³ zaznacz link\n->        wybierz link\n<-        powrót\ng         przejd¼ do URL-a\nG         przejd¼ do URL-a bazuj±cego na aktualnym\n/         szukaj\n?         szukaj wstecz\nn         znajd¼ nastêpny\nN         znajd¼ poprzedni\n=         informacje o dokumencie\n|         informacje o nag³ówkach\n\\         ¼ród³o dokumentu\nd         pobierz",
+ T_COPYING, "Kopiowanie",
+-T_COPYING_DESC, "Links " VERSION_STRING "\n\n" LINKS_COPYRIGHT_8859_2 "\n\nNiniejszy program jest oprogramowaniem wolnodostêpnym; mo¿na go rozprowadzaæ dalej i/lub modyfikowaæ na warunkach GPL GNU, wydanej przez Free Software Fundation - wed³ug wersji 2-giej tej Licencji lub której¶ z pó¼niejszych wersji.",
++T_COPYING_DESC, "Links " VERSION_STRING "\n\n" LINKS_COPYRIGHT_8859_2 "\n\nNiniejszy program jest oprogramowaniem wolnodostêpnym; mo¿na go rozprowadzaæ dalej i/lub modyfikowaæ na warunkach GPL GNU, wydanej przez Free Software Foundation - wed³ug wersji 2-giej tej Licencji lub której¶ z pó¼niejszych wersji.",
+ T_RESOURCES, "Zasoby",
+ T_HANDLES, "uchwyt(ów)",
+ T_TIMERS, "zegar(ów)",
