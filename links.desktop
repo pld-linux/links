@@ -7,5 +7,6 @@ Comment[pt]=O links é um browser para modo texto, similar ao lynx
 Comment[pt_BR]=O links é um browser para modo texto, similar ao lynx
 Exec=links
 Terminal=1
+Icon=http.png
 Type=Application
 # vi: encoding=utf-8
