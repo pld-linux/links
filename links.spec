@@ -6,23 +6,21 @@ Summary(ru):	Текстовый WWW броузер типа Lynx
 Summary(uk):	Текстовий WWW броузер типу Lynx
 Name:		links
 Version:	1.00
-%define	bver	pre12
-Release:	0.%{bver}.2
+%define	bver	pre14
+Release:	0.%{bver}.1
 Epoch:		2
 License:	GPL v2
 Group:		Applications/Networking
 Source0:	http://artax.karlin.mff.cuni.cz/~mikulas/links/download/%{name}-%{version}%{bver}.tar.gz
-# Source0-md5:	d6b7d862a0e3027c68fca2f787442167
+# Source0-md5:	87713eaab818c73503807fc13340fe5f
 Source1:	%{name}.desktop
 Source2:	%{name}.1.pl
 Source3:	%{name}.png
 URL:		http://artax.karlin.mff.cuni.cz/~mikulas/links/
 Patch0:		http://www.misiek.eu.org/ipv6/%{name}-0.92-ipv6-20000921.patch.gz
-Patch1:		%{name}-dump_codepage.patch
-Patch2:		%{name}-gzip_fallback.patch
-Patch3:		%{name}-content_encoding.patch
-Patch4:		%{name}-home_etc.patch
-Patch5:		%{name}-typo.patch
+Patch1:		%{name}-gzip_fallback.patch
+Patch2:		%{name}-content_encoding.patch
+Patch3:		%{name}-home_etc.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	gpm-devel
@@ -86,9 +84,7 @@ Links - це текстовий WWW броузер, на перший погляд схожий на Lynx, але
 %setup -q -n %{name}-%{version}%{bver}
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
-#%patch4 -p1
-%patch5 -p1
+#%patch3 -p1
 
 %build
 %{__aclocal}
