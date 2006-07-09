@@ -37,7 +37,7 @@
  		if (stt.st_size > MAXINT) {
 +			mem_free(name);
  			close(h);
- 			setcstate(c, S_OUT_OF_MEM); abort_connection(c);
+ 			setcstate(c, S_LARGE_FILE); abort_connection(c);
  			return;
  		}
 +#ifdef HAVE_ZLIB_H
