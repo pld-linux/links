@@ -16,11 +16,12 @@ Source0:	http://artax.karlin.mff.cuni.cz/~mikulas/links/download/%{name}-%{versi
 Source1:	%{name}.desktop
 Source2:	%{name}.1.pl
 Source3:	%{name}.png
-URL:		http://artax.karlin.mff.cuni.cz/~mikulas/links/
 Patch0:		http://www.misiek.eu.org/ipv6/%{name}-0.92-ipv6-20000921.patch.gz
 Patch1:		%{name}-gzip_fallback.patch
 Patch2:		%{name}-content_encoding.patch
-Patch3:		%{name}-home_etc.patch
+Patch3:		%{name}-pl-update.patch
+Patch4:		%{name}-home_etc.patch
+URL:		http://artax.karlin.mff.cuni.cz/~mikulas/links/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	gpm-devel
@@ -84,7 +85,11 @@ Links - це текстовий WWW броузер, на перший погляд схожий на Lynx, але
 %setup -q -n %{name}-%{version}%{bver}
 %patch1 -p1
 %patch2 -p1
-#%patch3 -p1
+%patch3 -p1
+#%patch4 -p1
+
+cd intl
+./gen-intl
 
 %build
 %{__aclocal}
