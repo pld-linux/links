@@ -7,7 +7,7 @@ Summary(uk):	Текстовий WWW броузер типу Lynx
 Name:		links
 Version:	1.00
 %define	bver	pre16
-Release:	0.%{bver}.2
+Release:	0.%{bver}.3
 Epoch:		2
 License:	GPL v2
 Group:		Applications/Networking
