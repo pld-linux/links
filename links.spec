@@ -6,13 +6,13 @@ Summary(ru):	Текстовый WWW броузер типа Lynx
 Summary(uk):	Текстовий WWW броузер типу Lynx
 Name:		links
 Version:	1.00
-%define	bver	pre16
-Release:	0.%{bver}.3
+%define	bver	pre18
+Release:	0.%{bver}.1
 Epoch:		2
 License:	GPL v2
 Group:		Applications/Networking
 Source0:	http://artax.karlin.mff.cuni.cz/~mikulas/links/download/%{name}-%{version}%{bver}.tar.gz
-# Source0-md5:	2d80bbac10b61606a905b8fb2897a6fc
+# Source0-md5:	58bcec286f862c21bb5e5a6c85ae6d2f
 Source1:	%{name}.desktop
 Source2:	%{name}.1.pl
 Source3:	%{name}.png
@@ -118,6 +118,6 @@ rm -rf $RPM_BUILD_ROOT
 %doc AUTHORS BUGS ChangeLog NEWS README SITES TODO
 %attr(755,root,root) %{_bindir}/*
 %{_desktopdir}/*.desktop
-%{_mandir}/man*/*
-%lang(pl) %{_mandir}/pl/man*/*
-%{_pixmapsdir}/*
+%{_mandir}/man1/*
+%lang(pl) %{_mandir}/pl/man1/*
+%{_pixmapsdir}/*.png
