@@ -1,5 +1,5 @@
---- links-1.00pre16/intl/polish.lng.orig	2006-04-02 20:04:39.000000000 +0200
-+++ links-1.00pre16/intl/polish.lng	2006-07-11 19:15:12.141732750 +0200
+--- links-1.00pre18/intl/polish.lng.orig	2006-09-21 03:37:24.000000000 +0200
++++ links-1.00pre18/intl/polish.lng	2006-11-19 17:45:22.971882000 +0100
 @@ -139,7 +139,7 @@
  T_RECEIVE_TIMEOUT, "Przekroczony limit czasu pobierania",
  T_REQUEST_MUST_BE_RESTARTED, "¯±danie musi byæ powtórzone",
@@ -9,7 +9,16 @@
  T_BAD_HTTP_RESPONSE, "Nieprawid³owa odpowied¼ HTTP",
  T_HTTP_100, NULL,
  T_NO_CONTENT, "Plik pusty",
-@@ -284,30 +284,30 @@
+@@ -169,7 +169,7 @@
+ T_COULD_NOT_WRITE_TO_FILE, "Nie mo¿na utworzyæ pliku",
+ T_ERROR_DOWNLOADING, "Wyst±pi³ b³±d podczas pobierania",
+ T_COULD_NOT_CREATE_FILE, "Nie mo¿na utworzyæ pliku",
+-T_COULD_NOT_CREATE_TEMPORARY_FILE, NULL,
++T_COULD_NOT_CREATE_TEMPORARY_FILE, "Nie mo¿na utworzyæ pliku tymczasowego",
+ T_UNKNOWN_TYPE, "Nieznany typ",
+ T_CONTEN_TYPE_IS, "Typ zawarto¶ci to",
+ T_DO_YOU_WANT_TO_SAVE_OR_DISLPAY_THIS_FILE, "Chcesz zapisaæ lub wy¶wietliæ ten plik?",
+@@ -285,30 +285,30 @@
  T_PASSWORD_FOR_ANONYMOUS_LOGIN, "Has³o dla logowania anonimowego",
  T_USE_PASSIVE_FTP, "U¿yj pasywnego FTP",
  T_USE_FAST_FTP, "U¿yj szybkiego (ale niekompatybilnego z RFC) FTP",
