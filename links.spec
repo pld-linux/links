@@ -6,21 +6,20 @@ Summary(ru):	Текстовый WWW броузер типа Lynx
 Summary(uk):	Текстовий WWW броузер типу Lynx
 Name:		links
 Version:	1.00
-%define	bver	pre18
+%define	bver	pre19
 Release:	0.%{bver}.1
 Epoch:		2
 License:	GPL v2
 Group:		Applications/Networking
 Source0:	http://artax.karlin.mff.cuni.cz/~mikulas/links/download/%{name}-%{version}%{bver}.tar.gz
-# Source0-md5:	58bcec286f862c21bb5e5a6c85ae6d2f
+# Source0-md5:	06e77a7b59d453d864d5f79ae02eb580
 Source1:	%{name}.desktop
 Source2:	%{name}.1.pl
 Source3:	%{name}.png
 Patch0:		http://www.misiek.eu.org/ipv6/%{name}-0.92-ipv6-20000921.patch.gz
 Patch1:		%{name}-gzip_fallback.patch
 Patch2:		%{name}-content_encoding.patch
-Patch3:		%{name}-pl-update.patch
-Patch4:		%{name}-home_etc.patch
+Patch3:		%{name}-home_etc.patch
 URL:		http://artax.karlin.mff.cuni.cz/~mikulas/links/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -85,11 +84,10 @@ Links - це текстовий WWW броузер, на перший погляд схожий на Lynx, але
 %setup -q -n %{name}-%{version}%{bver}
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
-#%patch4 -p1
+#%patch3 -p1
 
-cd intl
-./gen-intl
+#cd intl
+#./gen-intl
 
 %build
 %{__aclocal}
