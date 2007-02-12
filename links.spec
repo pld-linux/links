@@ -9,11 +9,11 @@
 # _without_atheos - compile without Atheos graphics driver
 
 Summary:	Lynx-like WWW browser
-Summary(es):	El links es un browser para modo texto, similar a lynx
-Summary(pl):	Podobna do Lynksa przegl╠darka WWW
-Summary(pt_BR):	O links И um browser para modo texto, similar ao lynx
-Summary(ru):	Текстовый WWW броузер типа Lynx
-Summary(uk):	Текстовий WWW броузер типу Lynx
+Summary(es.UTF-8):   El links es un browser para modo texto, similar a lynx
+Summary(pl.UTF-8):   Podobna do Lynksa przeglд┘darka WWW
+Summary(pt_BR.UTF-8):   O links ц╘ um browser para modo texto, similar ao lynx
+Summary(ru.UTF-8):   п╒п╣п╨я│я┌п╬п╡я▀п╧ WWW п╠я─п╬я┐п╥п╣я─ я┌п╦п©п╟ Lynx
+Summary(uk.UTF-8):   п╒п╣п╨я│я┌п╬п╡п╦п╧ WWW п╠я─п╬я┐п╥п╣я─ я┌п╦п©я┐ Lynx
 Name:		links
 Version:	2.1pre2
 Release:	1
@@ -64,45 +64,45 @@ different:
 %{!?_without_graphics:This version can work in graphical mode.}
 %{!?_without_javascript:This version has support for JavaScript.}
 
-%description -l es
+%description -l es.UTF-8
 Links es un browser WWW modo texto, similar al Lynx. El links muestra
 tablas, hace baja archivos en segundo plano, y usa conexiones HTTP/1.1
 keepalive.
 
-%description -l pl
-Links jest przegl╠dark╠ WWW, na pierwszy rzut oka podobn╠ do Lynksa,
-ale mimo wszystko inn╠:
+%description -l pl.UTF-8
+Links jest przeglд┘darkд┘ WWW, na pierwszy rzut oka podobnд┘ do Lynksa,
+ale mimo wszystko innд┘:
 
 - renderuje tabelki i ramki,
-- wy╤wietla kolory zgodnie z definicjami w ogl╠danej stronie HTML,
-- u©ywa opuszczanego menu (jak w Midnight Commanderze),
-- mo©e ╤ci╠gaФ pliki w tle.
+- wyе⌡wietla kolory zgodnie z definicjami w oglд┘danej stronie HTML,
+- uе╪ywa opuszczanego menu (jak w Midnight Commanderze),
+- moе╪e е⌡ciд┘gaд┤ pliki w tle.
 
-%{!?_without_graphics:Ta wersja mo©e pracowaФ w trybie graficznym.}
-%{!?_without_javascript:Ta wersja obsЁuguje JavaScript.}
+%{!?_without_graphics:Ta wersja moе╪e pracowaд┤ w trybie graficznym.}
+%{!?_without_javascript:Ta wersja obsе┌uguje JavaScript.}
 
-%description -l pt_BR
-Links И um browser WWW modo texto, similar ao Lynx. O Links exibe
-tabelas, faz baixa arquivos em segundo plano, e usa as conexУes
+%description -l pt_BR.UTF-8
+Links ц╘ um browser WWW modo texto, similar ao Lynx. O Links exibe
+tabelas, faz baixa arquivos em segundo plano, e usa as conexц╣es
 HTTP/1.1 keepalive.
 
-%description -l ru
-Links - это текстовый WWW броузер, на первый взгляд похожий на Lynx,
-но несколько отличающийся:
+%description -l ru.UTF-8
+Links - я█я┌п╬ я┌п╣п╨я│я┌п╬п╡я▀п╧ WWW п╠я─п╬я┐п╥п╣я─, п╫п╟ п©п╣я─п╡я▀п╧ п╡п╥пЁп╩я▐п╢ п©п╬я┘п╬п╤п╦п╧ п╫п╟ Lynx,
+п╫п╬ п╫п╣я│п╨п╬п╩я▄п╨п╬ п╬я┌п╩п╦я┤п╟я▌я┴п╦п╧я│я▐:
 
-- отображает таблицы и (скоро) фреймы,
-- показывает цвета как указано в HTML странице,
-- использует выпадающие меню (как в Midnight Commander),
-- может загружать файлы в фоне.
+- п╬я┌п╬п╠я─п╟п╤п╟п╣я┌ я┌п╟п╠п╩п╦я├я▀ п╦ (я│п╨п╬я─п╬) я└я─п╣п╧п╪я▀,
+- п©п╬п╨п╟п╥я▀п╡п╟п╣я┌ я├п╡п╣я┌п╟ п╨п╟п╨ я┐п╨п╟п╥п╟п╫п╬ п╡ HTML я│я┌я─п╟п╫п╦я├п╣,
+- п╦я│п©п╬п╩я▄п╥я┐п╣я┌ п╡я▀п©п╟п╢п╟я▌я┴п╦п╣ п╪п╣п╫я▌ (п╨п╟п╨ п╡ Midnight Commander),
+- п╪п╬п╤п╣я┌ п╥п╟пЁя─я┐п╤п╟я┌я▄ я└п╟п╧п╩я▀ п╡ я└п╬п╫п╣.
 
-%description -l uk
-Links - це текстовий WWW броузер, на перший погляд схожий на Lynx, але
-трохи в╕дм╕нний в╕д нього:
+%description -l uk.UTF-8
+Links - я├п╣ я┌п╣п╨я│я┌п╬п╡п╦п╧ WWW п╠я─п╬я┐п╥п╣я─, п╫п╟ п©п╣я─я┬п╦п╧ п©п╬пЁп╩я▐п╢ я│я┘п╬п╤п╦п╧ п╫п╟ Lynx, п╟п╩п╣
+я┌я─п╬я┘п╦ п╡я√п╢п╪я√п╫п╫п╦п╧ п╡я√п╢ п╫я▄п╬пЁп╬:
 
-- в╕добража╓ таблиц╕ та (незабаром) фрейми,
-- показу╓ кольори як вказано в HTML стор╕нц╕,
-- використову╓ випадаюч╕ меню (як в Midnight Commander),
-- може завантажувати файли в фон╕.
+- п╡я√п╢п╬п╠я─п╟п╤п╟я■ я┌п╟п╠п╩п╦я├я√ я┌п╟ (п╫п╣п╥п╟п╠п╟я─п╬п╪) я└я─п╣п╧п╪п╦,
+- п©п╬п╨п╟п╥я┐я■ п╨п╬п╩я▄п╬я─п╦ я▐п╨ п╡п╨п╟п╥п╟п╫п╬ п╡ HTML я│я┌п╬я─я√п╫я├я√,
+- п╡п╦п╨п╬я─п╦я│я┌п╬п╡я┐я■ п╡п╦п©п╟п╢п╟я▌я┤я√ п╪п╣п╫я▌ (я▐п╨ п╡ Midnight Commander),
+- п╪п╬п╤п╣ п╥п╟п╡п╟п╫я┌п╟п╤я┐п╡п╟я┌п╦ я└п╟п╧п╩п╦ п╡ я└п╬п╫я√.
 
 %prep
 %setup -q
