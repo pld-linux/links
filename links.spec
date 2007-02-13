@@ -1,9 +1,9 @@
 Summary:	Lynx-like text WWW browser
-Summary(es.UTF-8):   El links es un browser para modo texto, similar a lynx
-Summary(pl.UTF-8):   Podobna do Lynksa tekstowa przeglądarka WWW
-Summary(pt_BR.UTF-8):   O links é um browser para modo texto, similar ao lynx
-Summary(ru.UTF-8):   Текстовый WWW броузер типа Lynx
-Summary(uk.UTF-8):   Текстовий WWW броузер типу Lynx
+Summary(es.UTF-8):	El links es un browser para modo texto, similar a lynx
+Summary(pl.UTF-8):	Podobna do Lynksa tekstowa przeglądarka WWW
+Summary(pt_BR.UTF-8):	O links é um browser para modo texto, similar ao lynx
+Summary(ru.UTF-8):	Текстовый WWW броузер типа Lynx
+Summary(uk.UTF-8):	Текстовий WWW броузер типу Lynx
 Name:		links
 Version:	1.00
 %define	bver	pre19
