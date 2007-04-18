@@ -6,13 +6,13 @@ Summary(ru.UTF-8):	Текстовый WWW броузер типа Lynx
 Summary(uk.UTF-8):	Текстовий WWW броузер типу Lynx
 Name:		links
 Version:	1.00
-%define	bver	pre19
+%define	bver	pre20
 Release:	0.%{bver}.1
 Epoch:		2
 License:	GPL v2
 Group:		Applications/Networking
 Source0:	http://artax.karlin.mff.cuni.cz/~mikulas/links/download/%{name}-%{version}%{bver}.tar.gz
-# Source0-md5:	06e77a7b59d453d864d5f79ae02eb580
+# Source0-md5:	e05e4838920c14c9d683ff8b4730c164
 Source1:	%{name}.desktop
 Source2:	%{name}.1.pl
 Source3:	%{name}.png
