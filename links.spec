@@ -16,7 +16,7 @@ Source0:	http://artax.karlin.mff.cuni.cz/~mikulas/links/download/%{name}-%{versi
 Source1:	%{name}.desktop
 Source2:	%{name}.1.pl
 Source3:	%{name}.png
-Patch0:		http://www.misiek.eu.org/ipv6/%{name}-0.92-ipv6-20000921.patch.gz
+Patch0:		%{name}-0.92-ipv6-20000921.patch.gz
 Patch1:		%{name}-gzip_fallback.patch
 Patch2:		%{name}-content_encoding.patch
 Patch3:		%{name}-home_etc.patch
