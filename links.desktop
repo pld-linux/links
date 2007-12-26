@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Links
 Comment=Links is a text-only browser very similar to lynx
 Comment[es]=El links es un browser para modo texto, similar a lynx
@@ -8,7 +7,7 @@ Comment[pt]=O links é um browser para modo texto, similar ao lynx
 Comment[pt_BR]=O links é um browser para modo texto, similar ao lynx
 Exec=links
 Terminal=true
-Icon=links.png
+Icon=links
 Type=Application
 Categories=ConsoleOnly;Network;WebBrowser;
 # vi: encoding=utf-8
