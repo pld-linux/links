@@ -6,13 +6,12 @@ Summary(ru.UTF-8):	Текстовый WWW броузер типа Lynx
 Summary(uk.UTF-8):	Текстовий WWW броузер типу Lynx
 Name:		links
 Version:	1.00
-%define	bver	pre20
-Release:	0.%{bver}.1
+Release:	1
 Epoch:		2
-License:	GPL v2
+License:	GPL v2+
 Group:		Applications/Networking
-Source0:	http://artax.karlin.mff.cuni.cz/~mikulas/links/download/%{name}-%{version}%{bver}.tar.gz
-# Source0-md5:	e05e4838920c14c9d683ff8b4730c164
+Source0:	http://www.jikos.cz/~mikulas/links/download/%{name}-%{version}.tar.gz
+# Source0-md5:	b7409550b0dbdf715d7ce48ee89dab83
 Source1:	%{name}.desktop
 Source2:	%{name}.1.pl
 Source3:	%{name}.png
@@ -20,7 +19,7 @@ Patch0:		%{name}-0.92-ipv6-20000921.patch.gz
 Patch1:		%{name}-gzip_fallback.patch
 Patch2:		%{name}-content_encoding.patch
 Patch3:		%{name}-home_etc.patch
-URL:		http://artax.karlin.mff.cuni.cz/~mikulas/links/
+URL:		http://www.jikos.cz/~mikulas/links/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	gpm-devel
@@ -81,7 +80,7 @@ Links - це текстовий WWW броузер, на перший погля
 - може завантажувати файли в фоні.
 
 %prep
-%setup -q -n %{name}-%{version}%{bver}
+%setup -q
 %patch1 -p1
 %patch2 -p1
 #%patch3 -p1
@@ -114,8 +113,8 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc AUTHORS BUGS ChangeLog NEWS README SITES TODO
-%attr(755,root,root) %{_bindir}/*
-%{_desktopdir}/*.desktop
-%{_mandir}/man1/*
-%lang(pl) %{_mandir}/pl/man1/*
-%{_pixmapsdir}/*.png
+%attr(755,root,root) %{_bindir}/links
+%{_desktopdir}/links.desktop
+%{_pixmapsdir}/links.png
+%{_mandir}/man1/links.1*
+%lang(pl) %{_mandir}/pl/man1/links.1*
