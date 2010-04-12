@@ -6,7 +6,7 @@ Summary(ru.UTF-8):	Текстовый WWW броузер типа Lynx
 Summary(uk.UTF-8):	Текстовий WWW броузер типу Lynx
 Name:		links
 Version:	1.00
-Release:	2
+Release:	3
 Epoch:		2
 License:	GPL v2+
 Group:		Applications/Networking
