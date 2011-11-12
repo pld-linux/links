@@ -1,0 +1,326 @@
+;
+; IPv6 ready text web browser for PLD GNU/Linux
+; Note: FTP over IPv6 doesn't work, yet.
+;		Arkadiusz Miskiewicz <misiek@pld.org.pl>
+;
+diff -urN links-0.92.org/connect.c links-0.92/connect.c
+--- links-0.92.org/connect.c	Thu Jun 22 23:26:27 2000
++++ links-0.92/connect.c	Thu Sep 21 14:53:59 2000
+@@ -37,8 +37,8 @@
+ 
+ struct conn_info {
+ 	void (*func)(struct connection *);
+-	struct sockaddr_in sa;
+-	ip addr;
++	struct sockaddr_storage sa;
++	char addr[NI_MAXHOST];
+ 	int port;
+ 	int *sock;
+ };
+@@ -68,8 +68,8 @@
+ 	log_data("\nCONNECTION: ", 13);
+ 	log_data(host, strlen(host));
+ 	log_data("\n", 1);
+-	if (c->no_cache >= NC_RELOAD) as = find_host_no_cache(host, &b->addr, &c->dnsquery, (void(*)(void *, int))dns_found, c);
+-	else as = find_host(host, &b->addr, &c->dnsquery, (void(*)(void *, int))dns_found, c);
++	if (c->no_cache >= NC_RELOAD) as = find_host_no_cache(host, b->addr, &c->dnsquery, (void(*)(void *, int))dns_found, c);
++	else as = find_host(host, b->addr, &c->dnsquery, (void(*)(void *, int))dns_found, c);
+ 	mem_free(host);
+ 	if (as) setcstate(c, S_DNS);
+ }
+@@ -109,36 +110,59 @@
+ void dns_found(struct connection *c, int state)
+ {
+ 	int s;
++	struct addrinfo hints, *res, *res0;
+ 	struct conn_info *b = c->buffer;
++	char pbuf[NI_MAXSERV];
+ 	if (state) {
+ 		setcstate(c, S_NO_DNS);
+ 		retry_connection(c);
+ 		return;
+ 	}
+-	if ((s = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == -1) {
+-		setcstate(c, -errno);
++	sprintf(pbuf, "%d", b->port);
++	pbuf[sizeof(pbuf)-1] = '\0';
++	memset(&hints, 0, sizeof(hints));
++	hints.ai_family = AF_UNSPEC;
++	hints.ai_socktype = SOCK_STREAM;
++	if (getaddrinfo(b->addr, pbuf, &hints, &res0)) {
++	    	setcstate(c, -EADDRNOTAVAIL);
+ 		retry_connection(c);
+ 		return;
+ 	}
+-	*b->sock = s;
+-	fcntl(s, F_SETFL, O_NONBLOCK);
+-	memset(&b->sa, 0, sizeof(struct sockaddr_in));
+-	b->sa.sin_family = PF_INET;
+-	b->sa.sin_addr.s_addr = b->addr;
+-	b->sa.sin_port = htons(b->port);
+-	if (connect(s, (struct sockaddr *)&b->sa, sizeof b->sa)) {
+-		if (errno != EALREADY && errno != EINPROGRESS) {
+-			setcstate(c, -errno);
+-			retry_connection(c);
+-			return;
++
++	for (res = res0; res != NULL; res = res->ai_next) {
++	    if ((s = socket(res->ai_family, res->ai_socktype, res->ai_protocol)) == -1) {
++		if (res->ai_next)
++		    continue;
++		else {
++		    setcstate(c, -errno);
++		    retry_connection(c);
++		    freeaddrinfo(res0);
++		    return;
++		}
++	    }
++	    *b->sock = s;
++	    fcntl(s, F_SETFL, O_NONBLOCK);
++	    memcpy(&b->sa, res->ai_addr, res->ai_addrlen);
++	    if (connect(s, res->ai_addr, res->ai_addrlen)) {
++		if (res->ai_next) {
++		    close(s);
++		    continue;
++		} else if (errno != EALREADY && errno != EINPROGRESS) {
++		    setcstate(c, -errno);
++		    retry_connection(c);
++		    freeaddrinfo(res0);
++		    return;
+ 		}
+ 		set_handlers(s, NULL, (void(*)(void *))connected, (void(*)(void *))exception, c);
+ 		setcstate(c, S_CONN);
+-	} else {
++	    } else {
+ 		c->buffer = NULL;
+ 		b->func(c);
+ 		mem_free(b);
++	    }
++	    break;
+ 	}
++	freeaddrinfo(res0);
+ }
+ 
+ void connected(struct connection *c)
+diff -urN links-0.92.org/default.c links-0.92/default.c
+--- links-0.92.org/default.c	Thu Jun 22 09:37:36 2000
++++ links-0.92/default.c	Thu Sep 21 14:12:32 2000
+@@ -631,20 +631,16 @@
+ 
+ unsigned char *lookup_cmd(struct option *o, unsigned char ***argv, int *argc)
+ {
+-	ip addr;
++	char addr;
+ 	unsigned char *p = (unsigned char *)&addr;
+ 	if (!*argc) return "Parameter expected";
+ 	if (*argc >= 2) return "Too many parameters";
+ 	(*argv)++; (*argc)--;
+ 	if (do_real_lookup(*(*argv - 1), &addr)) {
+-#ifdef HAVE_HERROR
+-		herror("error");
+-#else
+ 		fprintf(stderr, "error: host not found\n");
+-#endif
+ 		return "";
+ 	}
+-	printf("%d.%d.%d.%d\n", (int)p[0], (int)p[1], (int)p[2], (int)p[3]);
++	printf("%s\n", addr);
+ 	fflush(stdout);
+ 	return "";
+ }
+diff -urN links-0.92.org/dns.c links-0.92/dns.c
+--- links-0.92.org/dns.c	Wed Jun 14 18:32:01 2000
++++ links-0.92/dns.c	Thu Sep 21 15:09:55 2000
+@@ -4,7 +4,7 @@
+ 	struct dnsentry *next;
+ 	struct dnsentry *prev;
+ 	ttime get_time;
+-	ip addr;
++	char addr[NI_MAXHOST];
+ 	char name[1];
+ };
+ 
+@@ -23,31 +23,41 @@
+ 	void (*xfn)(struct dnsquery *, int);
+ 	int h;
+ 	struct dnsquery **s;
+-	ip *addr;
++	char *addr;
+ 	char name[1];
+ };
+ 
+ struct list_head dns_cache = {&dns_cache, &dns_cache};
+ 
+-int do_real_lookup(unsigned char *name, ip *host)
++int do_real_lookup(unsigned char *name, char *host)
+ {
+-	struct hostent *hst;
+-	if (!(hst = gethostbyname(name))) return -1;
+-	memcpy(host, hst->h_addr_list[0], sizeof(ip));
++    	struct addrinfo hints, *res;
++	char hbuf[NI_MAXHOST];
++	memset(&hints, 0, sizeof(hints));
++	hints.ai_family = AF_UNSPEC;
++	hints.ai_socktype = SOCK_STREAM;
++	if (getaddrinfo(name, "0", &hints, &res)) return -1;
++	if (getnameinfo(res->ai_addr, res->ai_addrlen,
++		    hbuf, sizeof(hbuf), NULL, 0, NI_NUMERICHOST)) {
++	    freeaddrinfo(res);
++	    return -1;
++	}
++	freeaddrinfo(res);
++	memcpy(host, hbuf, NI_MAXHOST-1);
+ 	return 0;
+ }
+ 
+ void lookup_fn(unsigned char *name, int h)
+ {
+-	ip host;
+-	if (do_real_lookup(name, &host)) return;
+-	write(h, &host, sizeof(ip));
++	char host[NI_MAXHOST];
++	if (do_real_lookup(name, host)) return;
++	write(h, host, NI_MAXHOST);
+ }
+ 
+ void end_real_lookup(struct dnsquery *q)
+ {
+ 	int r = 1;
+-	if (!q->addr || read(q->h, q->addr, sizeof(ip)) != sizeof(ip)) goto end;
++	if (!q->addr || read(q->h, q->addr, NI_MAXHOST) != NI_MAXHOST) goto end;
+ 	r = 0;
+ 
+ 	end:
+@@ -134,7 +144,7 @@
+ 	}
+ 	if (!find_in_dns_cache(q->name, &dnsentry)) {
+ 		if (a) {
+-			memcpy(q->addr, &dnsentry->addr, sizeof(ip));
++			memcpy(q->addr, &dnsentry->addr, NI_MAXHOST);
+ 			a = 0;
+ 			goto e;
+ 		}
+@@ -144,7 +154,7 @@
+ 	if (a) goto e;
+ 	if ((dnsentry = mem_alloc(sizeof(struct dnsentry) + strlen(q->name) + 1))) {
+ 		strcpy(dnsentry->name, q->name);
+-		memcpy(&dnsentry->addr, q->addr, sizeof(ip));
++		memcpy(&dnsentry->addr, q->addr, NI_MAXHOST);
+ 		dnsentry->get_time = get_time();
+ 		add_to_list(dns_cache, dnsentry);
+ 	}
+@@ -156,7 +166,7 @@
+ 	fn(data, a);
+ }
+ 
+-int find_host_no_cache(unsigned char *name, ip *addr, void **qp, void (*fn)(void *, int), void *data)
++int find_host_no_cache(unsigned char *name, char *addr, void **qp, void (*fn)(void *, int), void *data)
+ {
+ 	struct dnsquery *q;
+ 	if (!(q = malloc(sizeof(struct dnsquery) + strlen(name) + 1))) {
+@@ -173,13 +183,13 @@
+ 	return do_queued_lookup(q);
+ }
+ 
+-int find_host(unsigned char *name, ip *addr, void **qp, void (*fn)(void *, int), void *data)
++int find_host(unsigned char *name, char *addr, void **qp, void (*fn)(void *, int), void *data)
+ {
+ 	struct dnsentry *dnsentry;
+ 	if (qp) *qp = NULL;
+ 	if (!find_in_dns_cache(name, &dnsentry)) {
+ 		if (dnsentry->get_time + DNS_TIMEOUT < get_time()) goto timeout;
+-		memcpy(addr, &dnsentry->addr, sizeof(ip));
++		memcpy(addr, &dnsentry->addr, NI_MAXHOST);
+ 		fn(data, 0);
+ 		return 0;
+ 	}
+diff -urN links-0.92.org/http.c links-0.92/http.c
+--- links-0.92.org/http.c	Tue Jun 20 23:38:35 2000
++++ links-0.92/http.c	Thu Sep 21 15:52:33 2000
+@@ -181,7 +181,12 @@
+ 	else add_to_str(&hdr, &l, " HTTP/1.0\r\n");
+ 	if ((h = get_host_name(host))) {
+ 		add_to_str(&hdr, &l, "Host: ");
+-		add_to_str(&hdr, &l, h);
++		if (strchr(h, ':') != strrchr(h, ':')) {
++		    add_to_str(&hdr, &l, "[");
++		    add_to_str(&hdr, &l, h);
++		    add_to_str(&hdr, &l, "]");
++		} else
++		    add_to_str(&hdr, &l, h);
+ 		mem_free(h);
+ 		add_to_str(&hdr, &l, "\r\n");
+ 	}
+diff -urN links-0.92.org/links.h links-0.92/links.h
+--- links-0.92.org/links.h	Sun Jun 18 18:36:55 2000
++++ links-0.92/links.h	Thu Sep 21 14:10:01 2000
+@@ -549,12 +549,10 @@
+ 
+ /* dns.c */
+ 
+-typedef unsigned ip;
+-
+-int do_real_lookup(unsigned char *, ip *);
++int do_real_lookup(unsigned char *, char *);
+ void shrink_dns_cache(int);
+-int find_host(unsigned char *, ip *, void **, void (*)(void *, int), void *);
+-int find_host_no_cache(unsigned char *, ip *, void **, void (*)(void *, int), void *);
++int find_host(unsigned char *, char *, void **, void (*)(void *, int), void *);
++int find_host_no_cache(unsigned char *, char *, void **, void (*)(void *, int), void *);
+ void kill_dns_request(void **);
+ 
+ /* cache.c */
+diff -urN links-0.92.org/url.c links-0.92/url.c
+--- links-0.92.org/url.c	Thu Jun 22 23:07:08 2000
++++ links-0.92/url.c	Thu Sep 21 15:49:42 2000
+@@ -46,7 +46,9 @@
+ int parse_url(unsigned char *url, int *prlen, unsigned char **user, int *uslen, unsigned char **pass, int *palen, unsigned char **host, int *holen, unsigned char **port, int *polen, unsigned char **data, int *dalen, unsigned char **post)
+ {
+ 	unsigned char *p, *q;
++	unsigned char *lb, *rb;
+ 	unsigned char p_c[2];
++	static unsigned char hostbuf[NI_MAXHOST];
+ 	int a;
+ 	if (prlen) *prlen = 0;
+ 	if (user) *user = NULL;
+@@ -60,6 +62,9 @@
+ 	if (data) *data = NULL;
+ 	if (dalen) *dalen = 0;
+ 	if (post) *post = NULL;
++	lb = strchr(url, '[');
++	rb = strchr(url, ']');
++	if (lb && rb && lb > rb) return -1;
+ 	if (!url || !(p = strchr(url, ':'))) return -1;
+ 	if (prlen) *prlen = p - url;
+ 	if ((a = check_protocol(url, p - url)) == -1) return -1;
+@@ -88,10 +93,27 @@
+ 		}
+ 		p = q + 1;
+ 	} 
+-	q = p + strcspn(p, ":/");
++	if (lb && rb)
++	{
++	    q = rb;
++	    q = rb + strcspn(rb, ":/");
++	} else
++	    q = p + strcspn(p, ":/");
+ 	if (!*q && protocols[a].need_slash_after_host) return -1;
+-	if (host) *host = p;
+-	if (holen) *holen = q - p;
++	if (host) {
++	    if (lb && rb) {
++		strncpy(hostbuf, lb + 1, rb - lb - 1);
++		hostbuf[rb - lb - 1] = 0;
++		*host = hostbuf;
++	    } else 
++		*host = p;
++	}
++	if (holen) {
++	    if (lb && rb)
++		*holen = strlen(hostbuf);
++	    else
++		*holen = q - p;
++	}
+ 	if (*q == ':') {
+ 		unsigned char *pp = q + strcspn(q, "/");
+ 		int cc;
