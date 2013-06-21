@@ -1,18 +1,18 @@
---- links-0.97/configure.in	Mon May  6 01:07:42 2002
-+++ links-0.97/configure.in.new	Wed Jul  3 10:43:47 2002
-@@ -138,6 +138,9 @@
+--- links-1.03/configure.in.orig	2013-06-21 20:16:45.722573508 +0200
++++ links-1.03/configure.in	2013-06-21 20:48:49.859159434 +0200
+@@ -365,6 +365,9 @@
  fi
  AC_MSG_RESULT($cf_result)
  
-+AC_CHECK_HEADERS(zlib.h)
-+AC_CHECK_LIB(z, gzdopen)
++AC_CHECK_HEADERS([zlib.h])
++AC_CHECK_LIB([z], [gzdopen])
 +
- AC_CHECK_LIB(dl, dlopen)
  #ifdef HAVE_SSL
- AC_ARG_WITH(ssl, [  --without-ssl           disable SSL support], [if test "$withval" = no; then disable_ssl=yes; fi])
---- links-1.00pre12/file.c.orig	2004-10-22 16:01:41.000000000 +0200
-+++ links-1.00pre12/file.c	2004-11-06 00:03:46.313650064 +0100
-@@ -221,9 +221,14 @@
+ ssld=yes
+ AC_ARG_WITH(ssl, [  --with-ssl(=directory)  enable SSL support], [if test "$withval" = no; then disable_ssl=yes; else ssld="$withval"; fi])
+--- links-1.03/file.c.orig	2011-11-16 03:26:53.000000000 +0100
++++ links-1.03/file.c	2013-06-21 21:00:28.615796496 +0200
+@@ -228,9 +228,14 @@
  		mem_free(name);
  		setcstate(c, S_FILE_TYPE); abort_connection(c); return;
  	}
@@ -25,15 +25,13 @@
 +			goto opening;
 +		} 
  		mem_free(name);
- 		setcstate(c, -er); abort_connection(c); return;
- 	}
-@@ -347,14 +352,45 @@
+ 		setcstate(c, get_error_from_errno(er));
+ 		abort_connection(c);
+@@ -363,12 +368,43 @@
  		add_to_str(&file, &fl, "</pre></body></html>\n");
  		head = stracpy("\r\nContent-Type: text/html\r\n");
  	} else {
 -		mem_free(name);
- 		/* + !stt.st_size is there because of bug in Linux. Read returns
- 		   -EACCES when reading 0 bytes to invalid address */
  		if (stt.st_size > MAXINT) {
 +			mem_free(name);
  			close(h);
@@ -71,10 +69,10 @@
 +#endif
 +		{
 +  		mem_free(name);
+ 		/* + !stt.st_size is there because of bug in Linux. Read returns
+ 		   -EACCES when reading 0 bytes to invalid address */
  		file = mem_alloc(stt.st_size + !stt.st_size);
- 		if ((r = read(h, file, stt.st_size)) != stt.st_size) {
- 			mem_free(file); close(h);
-@@ -364,6 +400,7 @@
+@@ -380,6 +416,7 @@
  		close(h);
  		fl = stt.st_size;
  		head = stracpy("");
