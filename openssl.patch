@@ -20,12 +20,20 @@
  				setcstate(c, S_SSL_NEG);
 --- links-1.03/https.c~	2006-09-11 02:09:24.000000000 +0000
 +++ links-1.03/https.c	2018-09-21 14:32:10.946014296 +0000
-@@ -33,7 +33,7 @@
- 		char f_randfile[PATH_MAX];
- 
- 		const char *f = RAND_file_name(f_randfile, sizeof(f_randfile));
+@@ -30,15 +30,7 @@
+ SSL *getSSL(void)
+ {
+ 	if (!context) {
+-		char f_randfile[PATH_MAX];
+-
+-		const char *f = RAND_file_name(f_randfile, sizeof(f_randfile));
 -		if (f && RAND_egd(f)<0) {
-+		if (f) {
- 			/* Not an EGD, so read and write to it */
- 			if (RAND_load_file(f_randfile, -1))
- 				RAND_write_file(f_randfile);
+-			/* Not an EGD, so read and write to it */
+-			if (RAND_load_file(f_randfile, -1))
+-				RAND_write_file(f_randfile);
+-		}
+-		SSLeay_add_ssl_algorithms();
++		OPENSSL_init_ssl(0, NULL);
+ 		context = SSL_CTX_new(SSLv23_client_method());
+ 		SSL_CTX_set_options(context, SSL_OP_ALL);
+ 		SSL_CTX_set_default_verify_paths(context);
