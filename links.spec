@@ -6,7 +6,7 @@ Summary(ru.UTF-8):	Текстовый WWW броузер типа Lynx
 Summary(uk.UTF-8):	Текстовий WWW броузер типу Lynx
 Name:		links
 Version:	1.03
-Release:	3
+Release:	4
 Epoch:		2
 License:	GPL v2+
 Group:		Applications/Networking
@@ -19,6 +19,7 @@ Patch0:		%{name}-0.92-ipv6-20000921.patch
 Patch1:		%{name}-gzip_fallback.patch
 Patch2:		%{name}-content_encoding.patch
 Patch3:		%{name}-home_etc.patch
+Patch4:		openssl.patch
 URL:		http://www.jikos.cz/~mikulas/links/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -85,6 +86,7 @@ Links - це текстовий WWW броузер, на перший погля
 %patch1 -p1
 %patch2 -p1
 #%patch3 -p1
+%patch4 -p1
 
 #cd intl
 #./gen-intl
