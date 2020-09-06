@@ -1,3 +1,4 @@
+# TODO: update IPv6 support
 Summary:	Lynx-like text WWW browser
 Summary(es.UTF-8):	El links es un browser para modo texto, similar a lynx
 Summary(pl.UTF-8):	Podobna do Lynksa tekstowa przeglądarka WWW
@@ -5,13 +6,13 @@ Summary(pt_BR.UTF-8):	O links é um browser para modo texto, similar ao lynx
 Summary(ru.UTF-8):	Текстовый WWW броузер типа Lynx
 Summary(uk.UTF-8):	Текстовий WWW броузер типу Lynx
 Name:		links
-Version:	1.03
-Release:	4.1
+Version:	1.04
+Release:	0.1
 Epoch:		2
 License:	GPL v2+
 Group:		Applications/Networking
 Source0:	http://www.jikos.cz/~mikulas/links/download/%{name}-%{version}.tar.gz
-# Source0-md5:	41ab5dd9ffdd5b8dbed2214eee2bc23c
+# Source0-md5:	ed149649bbe6813c5f74ce4ed26385d9
 Source1:	%{name}.desktop
 Source2:	%{name}.1.pl
 Source3:	%{name}.png
@@ -20,6 +21,7 @@ Patch1:		%{name}-gzip_fallback.patch
 Patch2:		%{name}-content_encoding.patch
 Patch3:		%{name}-home_etc.patch
 Patch4:		openssl.patch
+Patch5:		%{name}-pl-update.patch
 URL:		http://www.jikos.cz/~mikulas/links/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -87,9 +89,10 @@ Links - це текстовий WWW броузер, на перший погля
 %patch2 -p1
 #%patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
-#cd intl
-#./gen-intl
+cd intl
+./gen-intl
 
 %build
 %{__aclocal}
@@ -106,16 +109,16 @@ install -d $RPM_BUILD_ROOT{%{_desktopdir},%{_pixmapsdir}} \
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install %{SOURCE1} $RPM_BUILD_ROOT%{_desktopdir}
-install %{SOURCE2} $RPM_BUILD_ROOT%{_mandir}/pl/man1/links.1
-install %{SOURCE3} $RPM_BUILD_ROOT%{_pixmapsdir}
+cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_desktopdir}
+cp -p %{SOURCE2} $RPM_BUILD_ROOT%{_mandir}/pl/man1/links.1
+cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_pixmapsdir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS BUGS ChangeLog NEWS README SITES TODO
+%doc AUTHORS ChangeLog KEYS NEWS README SITES
 %attr(755,root,root) %{_bindir}/links
 %{_desktopdir}/links.desktop
 %{_pixmapsdir}/links.png

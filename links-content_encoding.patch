@@ -1,17 +1,17 @@
---- links-1.00/Makefile.am.orig	2007-12-24 23:11:54.000000000 +0100
-+++ links-1.00/Makefile.am	2008-08-17 13:55:31.433242824 +0200
+--- links-1.04/Makefile.am.orig	2020-09-06 09:49:55.873368277 +0200
++++ links-1.04/Makefile.am	2020-09-06 09:52:55.222396660 +0200
 @@ -8,7 +8,7 @@
- EXTRA_DIST=$(man_MANS) Unicode/* intl/* config2.h Makefile.gen BUGS TODO SITES mailcap.pl wipe-out-ssl wipe-out-ssl.awk links.nsi
+ EXTRA_DIST=$(man_MANS) descrip.mms *.opt Unicode/* intl/* KEYS SITES mailcap.pl wipe-out-ssl wipe-out-ssl.awk links.nsi rebuild rebuild.cmd pkg-config.m4
  
  bin_PROGRAMS=links
--links_SOURCES=af_unix.c beos.c bfu.c bookmark.c cache.c charsets.c connect.c cookies.c default.c dns.c error.c file.c finger.c ftp.c html.c html_r.c html_tbl.c http.c https.c kbd.c kbdbind.c language.c mailto.c main.c menu.c os_dep.c sched.c select.c session.c smb.c terminal.c types.c url.c view.c links.h os_dep.h os_depx.h setup.h codepage.h language.h codepage.inc entity.inc uni_7b.inc language.inc upcase.inc rebuild rebuild.cmd
-+links_SOURCES=af_unix.c beos.c bfu.c bookmark.c cache.c charsets.c compress.c connect.c cookies.c default.c dns.c error.c file.c finger.c ftp.c html.c html_r.c html_tbl.c http.c https.c kbd.c kbdbind.c language.c mailto.c main.c menu.c os_dep.c sched.c select.c session.c smb.c terminal.c types.c url.c view.c links.h os_dep.h os_depx.h setup.h codepage.h language.h codepage.inc entity.inc uni_7b.inc language.inc upcase.inc rebuild rebuild.cmd
+-links_SOURCES=af_unix.c beos.c bfu.c bookmark.c cache.c charsets.c connect.c cookies.c default.c dns.c error.c file.c finger.c fn_impl.c ftp.c hpux.c html.c html_r.c html_tbl.c http.c https.c kbd.c kbdbind.c language.c mailto.c main.c menu.c os_dep.c sched.c select.c session.c smb.c terminal.c types.c url.c view.c vms.c codepage.h com-defs.h config-vms.h hpux.h language.h links.h os_dep.h os_depx.h setup.h codepage.inc entity.inc language.inc uni_7b.inc upcase.inc
++links_SOURCES=af_unix.c beos.c bfu.c bookmark.c cache.c charsets.c compress.c connect.c cookies.c default.c dns.c error.c file.c finger.c fn_impl.c ftp.c hpux.c html.c html_r.c html_tbl.c http.c https.c kbd.c kbdbind.c language.c mailto.c main.c menu.c os_dep.c sched.c select.c session.c smb.c terminal.c types.c url.c view.c vms.c codepage.h com-defs.h config-vms.h hpux.h language.h links.h os_dep.h os_depx.h setup.h codepage.inc entity.inc language.inc uni_7b.inc upcase.inc
  
  datadir = $(prefix)/@DATADIRNAME@
  LIBS = @LIBS@
 --- /dev/null	Tue May  5 22:32:27 1998
 +++ links-0.97.newer/compress.c	Wed Jul  3 19:28:29 2002
-@@ -0,0 +1,166 @@
+@@ -0,0 +1,164 @@
 +#include "links.h"
 +
 +#define WMAXBITS 15
@@ -32,8 +32,6 @@
 +{
 +   mem_free(address);
 +}
-+      
-+
 +
 +static z_streamp gzip_init(unsigned char *buf_old, int l)
 +{
@@ -178,7 +176,6 @@
 +   *z = NULL;
 +   return output;
 +}
-+             
 --- links-0.97/http.c	Tue Mar 26 22:49:22 2002
 +++ links-0.97/http.c.new	Thu Jul  4 20:02:21 2002
 @@ -262,6 +262,7 @@
@@ -242,12 +239,12 @@
  			kill_buffer_data(rb, l);
  			if (!info->chunk_remaining && rb->len >= 1) {
  				if (rb->data[0] == 10) kill_buffer_data(rb, 1);
-@@ -635,6 +665,18 @@
+@@ -635,6 +665,19 @@
  	if (!e->last_modified && (d = parse_http_header(e->head, "Date", NULL)))
  		e->last_modified = d;
  	if (info->length == -1 || (version < 11 && info->close)) rb->close = 1;
-+	d = parse_http_header(e->head, "Content-Encoding", NULL);
 +	c->gzip = 0;
++	d = parse_http_header(e->head, "Content-Encoding", NULL);
 +	if (d) {
 +		if (!strcasecmp(d, "gzip") || !strcasecmp(d, "x-gzip")) {
 +			mem_free(d);
@@ -256,14 +253,15 @@
 +				if (!strncasecmp(d, "text", 4)) c->gzip = 1;
 +				mem_free(d);
 +			}
-+		}
++		} else
++			mem_free(d);
 +	} 
  	read_http_data(c, rb);
  }
  
---- links-0.97/links.h	Wed Jul  3 19:31:24 2002
-+++ links-0.97.newer/links.h	Wed Jul  3 18:59:03 2002
-@@ -99,6 +99,8 @@
+--- links-1.04/links.h.orig	2020-09-06 10:02:40.652558446 +0200
++++ links-1.04/links.h	2020-09-06 11:07:38.991439332 +0200
+@@ -197,6 +197,8 @@ strtoq(const char *, char **, int);
  
  #ifdef HAVE_ZLIB_H
  #include <zlib.h>
@@ -272,27 +270,25 @@
  #endif
  
  #include "os_depx.h"
-@@ -684,6 +685,8 @@
+@@ -1087,6 +1089,8 @@ struct connection {
  	SSL *ssl;
- 	int no_tsl;
+ 	int no_tls;
  #endif
 +   int gzip;
 +   z_streamp z;
  };
  
- static inline int getpri(struct connection *c)
---- links-0.97/sched.c	Wed Mar 27 00:32:49 2002
-+++ links-0.97.newer/sched.c	Wed Jul  3 18:26:17 2002
-@@ -220,7 +220,11 @@
+ extern tcount netcfg_stamp;
+--- links-1.04/sched.c.orig	2020-09-06 09:49:55.873368277 +0200
++++ links-1.04/sched.c	2020-09-06 09:54:13.408639755 +0200
+@@ -232,6 +232,10 @@ void del_connection(struct connection *c
  {
  	del_from_list(c);
  	send_connection_info(c);
--	mem_free(c->url);
 +	if (c->z) {
-+      inflateEnd(c->z);
-+      mem_free(c->z);
-+   }
-+   mem_free(c->url);
- 	mem_free(c);
- }
- 
++		inflateEnd(c->z);
++		mem_free(c->z);
++	}
+ 	if (c->detached) {
+ 		struct cache_entry *ce = c->cache;
+ 		if (ce && !ce->url[0] && !is_entry_used(ce) && !ce->refcount)

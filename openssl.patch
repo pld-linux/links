@@ -1,39 +1,14 @@
---- links-1.03/connect.c.orig	2018-09-21 14:20:27.000000000 +0000
-+++ links-1.03/connect.c	2018-09-21 14:30:55.284823551 +0000
-@@ -106,7 +106,7 @@
- 
- 	set_timeout(c);
- 
--	if (c->no_tsl) c->ssl->options |= SSL_OP_NO_TLSv1;
-+	if (c->no_tsl) SSL_set_options(c->ssl, SSL_OP_NO_TLSv1);
- 	switch (SSL_get_error(c->ssl, SSL_connect(c->ssl))) {
- 		case SSL_ERROR_NONE:
- 			c->newconn = NULL;
-@@ -187,7 +186,7 @@
- 	if (c->ssl) {
- 		c->ssl = getSSL();
- 		SSL_set_fd(c->ssl, *b->sock);
--		if (c->no_tsl) c->ssl->options |= SSL_OP_NO_TLSv1;
-+		if (c->no_tsl) SSL_set_options(c->ssl, SSL_OP_NO_TLSv1);
- 		switch (SSL_get_error(c->ssl, SSL_connect(c->ssl))) {
- 			case SSL_ERROR_WANT_READ:
- 				setcstate(c, S_SSL_NEG);
---- links-1.03/https.c~	2006-09-11 02:09:24.000000000 +0000
-+++ links-1.03/https.c	2018-09-21 14:32:10.946014296 +0000
-@@ -30,15 +30,7 @@
- SSL *getSSL(void)
- {
- 	if (!context) {
--		char f_randfile[PATH_MAX];
--
--		const char *f = RAND_file_name(f_randfile, sizeof(f_randfile));
--		if (f && RAND_egd(f)<0) {
--			/* Not an EGD, so read and write to it */
--			if (RAND_load_file(f_randfile, -1))
--				RAND_write_file(f_randfile);
--		}
--		SSLeay_add_ssl_algorithms();
+--- links-1.04/https.c.orig	2018-02-08 19:01:11.000000000 +0100
++++ links-1.04/https.c	2020-09-06 10:00:32.673251769 +0200
+@@ -53,7 +53,11 @@ SSL *getSSL(void)
+ 			RAND_add(pool, sizeof pool, sizeof pool);
+ 		}
+ #endif
++#if !(OPENSSL_API_COMPAT < 0x10100000L)
 +		OPENSSL_init_ssl(0, NULL);
++#else
+ 		SSLeay_add_ssl_algorithms();
++#endif
  		context = SSL_CTX_new(SSLv23_client_method());
  		SSL_CTX_set_options(context, SSL_OP_ALL);
  		SSL_CTX_set_default_verify_paths(context);

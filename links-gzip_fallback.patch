@@ -10,36 +10,48 @@
  #ifdef HAVE_SSL
  ssld=yes
  AC_ARG_WITH(ssl, [  --with-ssl(=directory)  enable SSL support], [if test "$withval" = no; then disable_ssl=yes; else ssld="$withval"; fi])
---- links-1.03/file.c.orig	2011-11-16 03:26:53.000000000 +0100
-+++ links-1.03/file.c	2013-06-21 21:00:28.615796496 +0200
-@@ -228,9 +228,14 @@
- 		mem_free(name);
- 		setcstate(c, S_FILE_TYPE); abort_connection(c); return;
+--- links-1.04/file.c.orig	2018-03-31 18:29:41.000000000 +0200
++++ links-1.04/file.c	2020-09-06 12:21:37.464060729 +0200
+@@ -224,6 +224,7 @@ void file_func(struct connection *c)
+ 	int h, r;
+ 	struct stat stt;
+ 	int rs;
++	int gz_fallback = 0;
+ 	if (anonymous) {
+ 		setcstate(c, S_BAD_URL);
+ 		abort_connection(c);
+@@ -232,8 +233,14 @@ void file_func(struct connection *c)
+ 	if (!(name = get_filename(c->url))) {
+ 		setcstate(c, S_OUT_OF_MEM); abort_connection(c); return;
  	}
-+opening:
- 	if ((h = open(name, O_RDONLY | O_NOCTTY)) == -1) {
- 		int er = errno;
- 		if ((d = opendir(name))) goto dir;
-+		if (strncmp(name + strlen(name) - 3, ".gz", 3) != 0) {
++checking:
+ 	EINTRLOOP(rs, stat(cast_const_char name, &stt));
+ 	if (rs) {
++		if ((strlen(name) <= 3) || (strncmp(name + strlen(name) - 3, ".gz", 3) != 0)) {
 +			add_to_strn(&name, ".gz");
-+			goto opening;
++			gz_fallback = 1;
++			goto checking;
 +		} 
  		mem_free(name);
- 		setcstate(c, get_error_from_errno(er));
- 		abort_connection(c);
-@@ -363,12 +368,43 @@
- 		add_to_str(&file, &fl, "</pre></body></html>\n");
- 		head = stracpy("\r\nContent-Type: text/html\r\n");
+ 		setcstate(c, get_error_from_errno(errno)); abort_connection(c); return;
+ 	}
+@@ -385,16 +392,47 @@ void file_func(struct connection *c)
+ 		add_to_str(&file, &fl, cast_uchar "</pre></body></html>\n");
+ 		head = stracpy(cast_uchar "\r\nContent-Type: text/html\r\n");
  	} else {
 -		mem_free(name);
- 		if (stt.st_size > MAXINT) {
+ 		if (
+ #ifndef __WATCOMC__
+ 		    stt.st_size < 0 ||
+ #endif
+ 		    stt.st_size > MAXINT) {
 +			mem_free(name);
- 			close(h);
+ 			EINTRLOOP(rs, close(h));
  			setcstate(c, S_LARGE_FILE); abort_connection(c);
  			return;
  		}
 +#ifdef HAVE_ZLIB_H
-+		if (strncmp(name + strlen(name) - 3, ".gz", 3) == 0) {
++		if (gz_fallback) {
 +		/* decompression */
 +			gzFile gh = gzdopen(h, "r");
 +			fl = 0;
@@ -71,15 +83,15 @@
 +  		mem_free(name);
  		/* + !stt.st_size is there because of bug in Linux. Read returns
  		   -EACCES when reading 0 bytes to invalid address */
- 		file = mem_alloc(stt.st_size + !stt.st_size);
-@@ -380,6 +416,7 @@
- 		close(h);
- 		fl = stt.st_size;
- 		head = stracpy("");
+ 		file = mem_alloc_mayfail((size_t)stt.st_size + !stt.st_size);
+@@ -418,6 +456,7 @@ void file_func(struct connection *c)
+ 		fl = r;
+ 		EINTRLOOP(rs, close(h));
+ 		head = stracpy(cast_uchar "");
 +		}
  	}
- 	if (get_cache_entry(c->url, &e)) {
- 		mem_free(file);
+ 	if (!c->cache) {
+ 		if (get_cache_entry(c->url, &c->cache)) {
 --- links-0.97/links.h	Wed Jul  3 10:36:17 2002
 +++ links-0.97/links.h.new	Wed Jul  3 10:44:18 2002
 @@ -97,6 +97,10 @@
