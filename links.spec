@@ -1,4 +1,6 @@
-# TODO: update IPv6 support
+# TODO:
+# - fix content_encoding patch with openssl >= 1.1
+# - update IPv6 support
 Summary:	Lynx-like text WWW browser
 Summary(es.UTF-8):	El links es un browser para modo texto, similar a lynx
 Summary(pl.UTF-8):	Podobna do Lynksa tekstowa przeglądarka WWW

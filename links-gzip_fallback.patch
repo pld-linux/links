@@ -1,6 +1,6 @@
---- links-1.03/configure.in.orig	2013-06-21 20:16:45.722573508 +0200
-+++ links-1.03/configure.in	2013-06-21 20:48:49.859159434 +0200
-@@ -365,6 +365,9 @@
+--- links-1.04/configure.in.orig	2013-06-21 20:16:45.722573508 +0200
++++ links-1.04/configure.in	2013-06-21 20:48:49.859159434 +0200
+@@ -486,6 +486,9 @@ else
  fi
  AC_MSG_RESULT($cf_result)
  
@@ -9,7 +9,7 @@
 +
  #ifdef HAVE_SSL
  ssld=yes
- AC_ARG_WITH(ssl, [  --with-ssl(=directory)  enable SSL support], [if test "$withval" = no; then disable_ssl=yes; else ssld="$withval"; fi])
+ withval=
 --- links-1.04/file.c.orig	2018-03-31 18:29:41.000000000 +0200
 +++ links-1.04/file.c	2020-09-06 12:21:37.464060729 +0200
 @@ -224,6 +224,7 @@ void file_func(struct connection *c)
@@ -92,10 +92,10 @@
  	}
  	if (!c->cache) {
  		if (get_cache_entry(c->url, &c->cache)) {
---- links-0.97/links.h	Wed Jul  3 10:36:17 2002
-+++ links-0.97/links.h.new	Wed Jul  3 10:44:18 2002
-@@ -97,6 +97,10 @@
- #include <openssl/ssl.h>
+--- links-1.04/links.h.orig	2023-10-25 07:59:24.384129610 +0200
++++ links-1.04/links.h	2023-10-25 08:01:46.170028157 +0200
+@@ -195,6 +195,10 @@ strtoq(const char *, char **, int);
+ #include <openssl/rand.h>
  #endif
  
 +#ifdef HAVE_ZLIB_H
