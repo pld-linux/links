@@ -89,7 +89,7 @@ Links - це текстовий WWW броузер, на перший погля
 %setup -q
 %patch -P1 -p1
 %patch -P2 -p1
-#%patch3 -p1
+#%%patch3 -p1
 %patch -P4 -p1
 %patch -P5 -p1
 
